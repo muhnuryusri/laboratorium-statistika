@@ -1,0 +1,58 @@
+<modules>
+    <module>
+        <id>1</id>
+        <title>Deskriptif Data</title>
+        <description>
+
+        </description>
+    </module>
+    <module>
+        <id>2</id>
+        <title>Uji Asumsi</title>
+        <tab>
+            <name>Uji Normalitas</name>
+        </tab>
+        <tab>
+            <name>Uji Homogenitas</name>
+        </tab>
+        <tab>
+            <name>Uji Heterokedasitas</name>
+        </tab>
+        <tab>
+            <name>Uji Autokorelasi</name>
+        </tab>
+        <tab>
+            <name>Uji Multikolienaritas</name>
+        </tab>
+    </module>
+    <module>
+        <id>3</id>
+        <title>Uji Parametik</title>
+        <tab>
+            <name>Uji T</name>
+        </tab>
+        <tab>
+            <name>Uji Anova</name>
+        </tab>
+        <tab>
+            <name>Uji Regresi</name>
+        </tab>
+    </module>
+    <module>
+        <id>4</id>
+        <title>Uji Non-Parametik</title>
+        <tab>
+            <name>Uji Binomial</name>
+        </tab>
+        <tab>
+            <name>Mann Whitney</name>
+        </tab>
+        <tab>
+            <name>Kruskal Walls</name>
+        </tab>
+    </module>
+    <module>
+        <id>5</id>
+        <title>Uji Instrumen</title>
+    </module>
+</modules>
