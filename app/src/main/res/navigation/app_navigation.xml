@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/dashboardFragment"
+    android:id="@+id/app_navigation">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.laboratorium_statistika.ui.dashboard.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard">
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_moduleFragment"
+            app:destination="@id/moduleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/moduleFragment"
+        android:name="com.example.laboratorium_statistika.ui.module.ModuleFragment"
+        android:label="fragment_module"
+        tools:layout="@layout/fragment_module">
+
+        <action
+            android:id="@+id/action_moduleFragment_to_moduleTabFragment"
+            app:destination="@id/moduleTabFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/moduleTabFragment"
+        android:name="com.example.laboratorium_statistika.ui.module.tab.ModuleTabFragment"
+        android:label="fragment_module_tab"
+        tools:layout="@layout/fragment_module_tab">
+
+        <argument
+            android:name="moduleId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dataAnalysisFragment"
+        android:name="com.example.laboratorium_statistika.ui.data_analysis.DataAnalysisFragment"
+        android:label="fragment_data_analysis"
+        tools:layout="@layout/fragment_data_analysis">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/tableFragment"
+        android:name="com.example.laboratorium_statistika.ui.table.TableFragment"
+        android:label="fragment_table"
+        tools:layout="@layout/fragment_table">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/exercisesFragment"
+        android:name="com.example.laboratorium_statistika.ui.excercises.ExercisesFragment"
+        android:label="fragment_exercises"
+        tools:layout="@layout/fragment_exercises">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/guideFragment"
+        android:name="com.example.laboratorium_statistika.ui.guide.GuideFragment"
+        android:label="fragment_guide"
+        tools:layout="@layout/fragment_guide">
+
+    </fragment>
+</navigation>
