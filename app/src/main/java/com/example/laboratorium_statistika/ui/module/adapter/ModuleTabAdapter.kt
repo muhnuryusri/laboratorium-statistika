@@ -13,7 +13,7 @@ import com.example.laboratorium_statistika.databinding.ItemModuleBinding
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
 
-class ModuleTabAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<ModuleTabAdapter.ViewHolder>() {
+class ModuleTabAdapter(private val callback: MyAdapterCallback) : RecyclerView.Adapter<ModuleTabAdapter.ViewHolder>() {
     private val items = mutableListOf<ModuleTab>()
 
     fun setItems(newItems: List<ModuleTab>) {
@@ -40,7 +40,7 @@ class ModuleTabAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Ad
         fun bind(item: ModuleTab) {
             binding.btnModul.text = item.title
             binding.btnModul.setOnClickListener {
-                item.id?.let { it1 -> onItemClick(it1) }
+                callback.onModuleTabClick(item)
             }
         }
     }

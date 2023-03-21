@@ -12,12 +12,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.laboratorium_statistika.databinding.FragmentModuleBinding
 import com.example.laboratorium_statistika.model.Module
+import com.example.laboratorium_statistika.model.ModuleTab
 import com.example.laboratorium_statistika.repository.ModuleRepositoryImpl
 import com.example.laboratorium_statistika.ui.module.adapter.ModuleAdapter
 import com.example.laboratorium_statistika.ui.module.adapter.MyAdapterCallback
 import com.example.laboratorium_statistika.viewmodel.ModuleViewModelFactory
 
-class ModuleFragment : Fragment() {
+class ModuleFragment : Fragment(), MyAdapterCallback {
     private lateinit var binding: FragmentModuleBinding
     private lateinit var adapter: ModuleAdapter
     private lateinit var viewModel: ModuleViewModel
@@ -33,11 +34,7 @@ class ModuleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ModuleAdapter { moduleId ->
-            val action = ModuleFragmentDirections.actionModuleFragmentToModuleTabFragment(moduleId)
-            findNavController().navigate(action)
-            Log.d("ModuleId", "Module id: $moduleId")
-        }
+        adapter = ModuleAdapter(this)
         binding.rvModule.adapter = adapter
         binding.rvModule.layoutManager = LinearLayoutManager(activity)
 
@@ -50,6 +47,15 @@ class ModuleFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onModuleClick(id: Int) {
+        val action = ModuleFragmentDirections.actionModuleFragmentToModuleTabFragment(id)
+        findNavController().navigate(action)
+    }
+
+    override fun onModuleTabClick(moduleTab: ModuleTab) {
+
     }
 
 }
