@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_moduleFragment_to_moduleTabFragment"
             app:destination="@id/moduleTabFragment" />
+        <action
+            android:id="@+id/action_moduleFragment_to_moduleDetailFragment"
+            app:destination="@id/moduleDetailFragment" />
     </fragment>
 
     <fragment
@@ -35,6 +38,21 @@
 
         <argument
             android:name="moduleId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_moduleTabFragment_to_moduleDetailFragment"
+            app:destination="@id/moduleDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/moduleDetailFragment"
+        android:name="com.example.laboratorium_statistika.ui.module.detail.DetailModuleFragment"
+        android:label="fragment_detail_module"
+        tools:layout="@layout/fragment_detail_module">
+
+        <argument
+            android:name="tabId"
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
