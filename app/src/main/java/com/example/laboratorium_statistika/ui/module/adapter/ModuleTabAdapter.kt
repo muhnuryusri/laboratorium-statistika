@@ -13,13 +13,14 @@ import com.example.laboratorium_statistika.databinding.ItemModuleBinding
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
 
-class ModuleAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<ModuleAdapter.ViewHolder>() {
-    private val items = mutableListOf<Module>()
+class ModuleTabAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<ModuleTabAdapter.ViewHolder>() {
+    private val items = mutableListOf<ModuleTab>()
 
-    fun setItems(newItems: List<Module>) {
+    fun setItems(newItems: List<ModuleTab>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
+        Log.d("ModuleAdapter", "Added module tab: $newItems")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -36,7 +37,7 @@ class ModuleAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapt
     }
 
     inner class ViewHolder(private val binding: ItemModuleBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Module) {
+        fun bind(item: ModuleTab) {
             binding.btnModul.text = item.title
             binding.btnModul.setOnClickListener {
                 item.id?.let { it1 -> onItemClick(it1) }

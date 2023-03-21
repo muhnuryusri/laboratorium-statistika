@@ -3,36 +3,37 @@
         <id>1</id>
         <title>Deskriptif Data</title>
         <description>
-
+            Lorem ipsum dolor sit amet
         </description>
     </module>
     <module>
         <id>2</id>
         <title>Uji Asumsi</title>
         <tab>
+            <tab_id>1</tab_id>
             <tab_title>Uji Normalitas</tab_title>
             <description>
                 Uji ini dilakukan untuk mengetahui apakah dalam sebuah model regresi, nilai residual memiliki distribusi normal atau tidak. Residual adalah nilai selisih antara variabel Y dengan variabel Y diprediksikan. Model regresi yang baik adalah yang terdistribusi secara normal atau mendekati normal sehingga data layak untuk diuji secara statistik.
             </description>
         </tab>
         <tab>
+            <tab_id>2</tab_id>
             <tab_title>Uji Homogenitas</tab_title>
         </tab>
         <tab>
+            <tab_id>3</tab_id>
             <tab_title>Uji Heterokedasitas</tab_title>
             <description>
-                <p>
-                    Heteroskedastisitas menguji terjadinya perbedaan variance residual suatu periode pengamatan ke periode pengamatan yang lain. Cara memprediksi ada tidaknya heteroskedastisitas dapat dilihat pada output nilai signifikansi > 0,05 maka tidak terjadi heteroskedastisitas, begiu juga sebaliknya. Untuk mendukung kesimpulan dari signifikansi tersebut, pada suatu model dapat dilihat dengan pola gambar Scatterplot, regresi yang tidak terjadi heteroskedastisitas jika :
-                </p>
-                <p>
-                    a. Titik-titik data menyebar diatas dan dibawah atau disekitar angka 0
-                    b. Titik-titik data tidak mengumpul hanya diatas atau dibawah saja.
-                    c. Penyebaran titik-titik data tidak boleh membentuk pola bergelombang melebar kemudian menyempit dan melebar kembali
-                    d. Penyebaran titik-titik data tidak berpola.
-                </p>
+                Heteroskedastisitas menguji terjadinya perbedaan variance residual suatu periode pengamatan ke periode pengamatan yang lain. Cara memprediksi ada tidaknya heteroskedastisitas dapat dilihat pada output nilai signifikansi > 0,05 maka tidak terjadi heteroskedastisitas, begiu juga sebaliknya. Untuk mendukung kesimpulan dari signifikansi tersebut, pada suatu model dapat dilihat dengan pola gambar Scatterplot, regresi yang tidak terjadi heteroskedastisitas jika :
+
+                a. Titik-titik data menyebar diatas dan dibawah atau disekitar angka 0
+                b. Titik-titik data tidak mengumpul hanya diatas atau dibawah saja.
+                c. Penyebaran titik-titik data tidak boleh membentuk pola bergelombang melebar kemudian menyempit dan melebar kembali
+                d. Penyebaran titik-titik data tidak berpola.
             </description>
         </tab>
         <tab>
+            <tab_id>4</tab_id>
             <tab_title>Uji Autokorelasi</tab_title>
             <description>
                 Uji autokerelasi dalam suatu model bertujuan untuk mengetahui ada tidaknya korelasi antara variabel pengganggu pada periode tertentu dengan variabel sebelumnya. Untuk data time series autokorelasi sering terjadi. Tetapi untuk data yang sampelnya crossection jarang terjadi karena variabel penggangu satu berbeda dengan yang lain. Mendeteksi autokorelasi dengan menggunakan nilai Durbin Watson dibandingkan dengan tabel Durbin Watson (dl dan du). Kriteria jika &lt; d hitung &lt; 4-du maka tidak terjadi autokorelasi.
@@ -40,14 +41,11 @@
             </description>
         </tab>
         <tab>
+            <tab_id>5</tab_id>
             <tab_title>Uji Multikolienaritas</tab_title>
             <description>
-                <p>
-                    Uji multikolinieritas diperlukan untuk mengetahui ada tidaknya variabel independen yang memiliki kemiripan antar variabel independen dalam suatu model. Oleh karena itu, multikolinearitas tidak terjadi pada regresi linear sederhana yang hanya melibatkan datu variabel independen. Adanya hubungan diantara variabel bebasadalah hal yang tak bisa dihindari dan memang diperlukan agar regresi yang diperoleh bersifat valid.
-                </p>
-                <p>
-                    Namun, hubungan yang bersifat linier harus dihindari karena akan menimbulkan gagal estimasi (multikolinearitas sempurna) atau sulit dalam inferensi (multikolinearitas tidak sempurna). Jika dalam model terdapat multikolinearitas maka model tersebut memiliki kesalahan standar yang besar sehingga koefisien tidak dapat ditaksir dengan ketepatan yang tinggi.
-                </p>
+                Uji multikolinieritas diperlukan untuk mengetahui ada tidaknya variabel independen yang memiliki kemiripan antar variabel independen dalam suatu model. Oleh karena itu, multikolinearitas tidak terjadi pada regresi linear sederhana yang hanya melibatkan datu variabel independen. Adanya hubungan diantara variabel bebasadalah hal yang tak bisa dihindari dan memang diperlukan agar regresi yang diperoleh bersifat valid.
+                Namun, hubungan yang bersifat linier harus dihindari karena akan menimbulkan gagal estimasi (multikolinearitas sempurna) atau sulit dalam inferensi (multikolinearitas tidak sempurna). Jika dalam model terdapat multikolinearitas maka model tersebut memiliki kesalahan standar yang besar sehingga koefisien tidak dapat ditaksir dengan ketepatan yang tinggi.
             </description>
         </tab>
     </module>
@@ -55,66 +53,63 @@
         <id>3</id>
         <title>Uji Parametik</title>
         <tab>
-            Uji T
+            <tab_id>1</tab_id>
+            <tab_title>Uji T</tab_title>
         </tab>
         <tab>
-            Uji Anova
+            <tab_id>2</tab_id>
+            <tab_title>Uji Anova</tab_title>
             <description>
-                <section>
-                    <p>
-                        ANOVA (Analysis of Variance) merupakan uji komparasi multivariabel dengan menguji apakah terdapat perbedaan rata-rata tiga kelompok atau lebih dengan membandingkan variansinya. Anova dapat digunakan untuk menganalisa sejumlah sampel dengan jumlah data yang sama pada tiap-tiap kelompok sampel, atau dengan jumlah data yang berbeda. ANOVA mensyaratkan data-data penelitian untuk dikelompokkan berdasarkan kriteria tertentu. Sampel yang berbeda dilihat dari variabilitas-nya. Ukuran-ukuran pada variabilitas ditunjukkan dengan nilai variansi dan standard deviation (simpangan baku).
-                    </p>
-                    <p>
-                        Ada beberapa asumsi yang digunakan dalam pengujian Anova, yaitu:
-                        1. Data dari populasi-populasi (sampel) berjenis interval atau rasio.
-                        2. Populasi atau sampel yang akan diuji lebih dari dua populasi.
-                        3. Populasi atau sampel yang akan diuji berdistribusi normal.
-                        4. Varian setiap populasi (sampel) harus sama (homogen)
-                    </p>
-                </section>
-                <p>
-                    Pengujian Anova terbagi menjadi dua, yaitu :
-                </p>
-                <section>
-                    <p>
-                        1. Anova satu arah (One Way Anova)
-                        Anova satu arah (One Way Anova) merupakan pengujian Anova yang didasarkan pada satu faktor yang terdiri dari tiga atau lebih kategori (populasi). Anova satu arah (One way Anova) biasanya digunakan untuk menguji nilai rata-rata perlakuan dari suatu percobaan yang menggunakan satu faktor, dimana satu faktor tersebut memiliki tiga atau lebih kelompok. Disebut satu arah karena peneliti dalam penelitiannya hanya berkepentingan dengan satu faktor saja atau mengelompokkan data berdasarkan satu kriteria saja. Misalnya, manajer pemasaran toko elektronik ingin mengamati apakah terdapat perbedaan rata-rata penjualan HP berdasarkan faktor mereknya, yang terdiri dari Samsung, Lenovo, Asus, dan iPhone.
-                    </p>
-                </section>
-                <section>
-                    <p>
-                        2. Anova dua arah (Two Way Anova)
-                        Anova dua arah (Two Way Anova) merupakan pengujian Anova yang didasarkan pada dua faktor yang terdiri dari tiga atau lebih kategori (populasi). ANOVA dua arah digunakan abila sumber keragaman yang terjadi tidak hanya karena satu faktor atau satu perlakuan. Faktor lain yang mungkin menjadi sumber keragaman respon juga diperhatikan. Faktor lain ini bisa perlakuan lain atau faktor yang sudah terkondisi. Pertimbangan memasukkan faktor kedua sebagai sumber keragaman ini perlu bila faktor itu dikelompokkan (blok), sehingga keragaman antar kelompok sangat besar, tetapi kecil dalam kelompok sendiri.
-                    </p>
-                    <p>
-                        Tujuan dan pengujian ANOVA dua arah ini adalah untuk mengetahui apakah ada perbedaan dari berbagai faktor atau kriteria yang diuji terhadap hasil yang diinginkan. Misalnya, seorang manajer teknik menguji apakah ada perbedaan hasil penganyaman sebuah karung plastik pada mesin circular berdasarkan jenis pelumas yang dipergunakan pada roda pendorong dengan kecepatan roda pendorong. ANOVA dua arah terdiri dari 2 jenis, yaitu :
-                    </p>
-                    <p>
-                        1. ANOVA Dua Arah Data Tunggal (Two Way ANOVA Without Replication) : Sejumlah pengamatan yang diklasifikasikan menurut dua faktor dengan data yang digunakan bersifat tunggal dimana tidak terdapat replikasi dalam pengamatan.
-                        2. ANOVA Dua Arah Data Banyak (Two Way ANOVA With Replication) : Sejumlah pengamatan diklasifikasikan menurut dua faktor dengan data yang digunakan melibatkan replikasi dalam pengamatan.
-                    </p>
-                </section>
+                ANOVA (Analysis of Variance) merupakan uji komparasi multivariabel dengan menguji apakah terdapat perbedaan rata-rata tiga kelompok atau lebih dengan membandingkan variansinya. Anova dapat digunakan untuk menganalisa sejumlah sampel dengan jumlah data yang sama pada tiap-tiap kelompok sampel, atau dengan jumlah data yang berbeda. ANOVA mensyaratkan data-data penelitian untuk dikelompokkan berdasarkan kriteria tertentu. Sampel yang berbeda dilihat dari variabilitas-nya. Ukuran-ukuran pada variabilitas ditunjukkan dengan nilai variansi dan standard deviation (simpangan baku).
+
+                Ada beberapa asumsi yang digunakan dalam pengujian Anova, yaitu:
+                1. Data dari populasi-populasi (sampel) berjenis interval atau rasio.
+                2. Populasi atau sampel yang akan diuji lebih dari dua populasi.
+                3. Populasi atau sampel yang akan diuji berdistribusi normal.
+                4. Varian setiap populasi (sampel) harus sama (homogen)
+
+
+                Pengujian Anova terbagi menjadi dua, yaitu :
+
+
+                1. Anova satu arah (One Way Anova)
+                Anova satu arah (One Way Anova) merupakan pengujian Anova yang didasarkan pada satu faktor yang terdiri dari tiga atau lebih kategori (populasi). Anova satu arah (One way Anova) biasanya digunakan untuk menguji nilai rata-rata perlakuan dari suatu percobaan yang menggunakan satu faktor, dimana satu faktor tersebut memiliki tiga atau lebih kelompok. Disebut satu arah karena peneliti dalam penelitiannya hanya berkepentingan dengan satu faktor saja atau mengelompokkan data berdasarkan satu kriteria saja. Misalnya, manajer pemasaran toko elektronik ingin mengamati apakah terdapat perbedaan rata-rata penjualan HP berdasarkan faktor mereknya, yang terdiri dari Samsung, Lenovo, Asus, dan iPhone.
+
+                2. Anova dua arah (Two Way Anova)
+                Anova dua arah (Two Way Anova) merupakan pengujian Anova yang didasarkan pada dua faktor yang terdiri dari tiga atau lebih kategori (populasi). ANOVA dua arah digunakan abila sumber keragaman yang terjadi tidak hanya karena satu faktor atau satu perlakuan. Faktor lain yang mungkin menjadi sumber keragaman respon juga diperhatikan. Faktor lain ini bisa perlakuan lain atau faktor yang sudah terkondisi. Pertimbangan memasukkan faktor kedua sebagai sumber keragaman ini perlu bila faktor itu dikelompokkan (blok), sehingga keragaman antar kelompok sangat besar, tetapi kecil dalam kelompok sendiri.
+
+                Tujuan dan pengujian ANOVA dua arah ini adalah untuk mengetahui apakah ada perbedaan dari berbagai faktor atau kriteria yang diuji terhadap hasil yang diinginkan. Misalnya, seorang manajer teknik menguji apakah ada perbedaan hasil penganyaman sebuah karung plastik pada mesin circular berdasarkan jenis pelumas yang dipergunakan pada roda pendorong dengan kecepatan roda pendorong. ANOVA dua arah terdiri dari 2 jenis, yaitu :
+
+                1. ANOVA Dua Arah Data Tunggal (Two Way ANOVA Without Replication) : Sejumlah pengamatan yang diklasifikasikan menurut dua faktor dengan data yang digunakan bersifat tunggal dimana tidak terdapat replikasi dalam pengamatan.
+                2. ANOVA Dua Arah Data Banyak (Two Way ANOVA With Replication) : Sejumlah pengamatan diklasifikasikan menurut dua faktor dengan data yang digunakan melibatkan replikasi dalam pengamatan.
             </description>
         </tab>
         <tab>
-            Uji Regresi
+            <tab_id>3</tab_id>
+            <tab_title>Uji Regresi</tab_title>
         </tab>
     </module>
     <module>
         <id>4</id>
         <title>Uji Non-Parametik</title>
         <tab>
-            Uji Binomial
+            <tab_id>1</tab_id>
+            <tab_title>Uji Binomial</tab_title>
         </tab>
         <tab>
-            Mann Whitney
+            <tab_id>2</tab_id>
+            <tab_title>Mann Whitney</tab_title>
         </tab>
         <tab>
-            Kruskal Walls
+            <tab_id>3</tab_id>
+            <tab_title>Kruskal Walls</tab_title>
         </tab>
     </module>
     <module>
         <id>5</id>
         <title>Uji Instrumen</title>
+        <description>
+            Lorem ipsum dolor sit amet
+        </description>
     </module>
 </modules>

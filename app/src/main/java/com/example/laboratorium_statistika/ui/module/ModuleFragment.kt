@@ -1,10 +1,12 @@
 package com.example.laboratorium_statistika.ui.module
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +17,9 @@ import com.example.laboratorium_statistika.ui.module.adapter.ModuleAdapter
 import com.example.laboratorium_statistika.ui.module.adapter.MyAdapterCallback
 import com.example.laboratorium_statistika.viewmodel.ModuleViewModelFactory
 
-class ModuleFragment : Fragment(), MyAdapterCallback {
+class ModuleFragment : Fragment() {
     private lateinit var binding: FragmentModuleBinding
-    private lateinit var adapter: ModuleAdapter<Module>
+    private lateinit var adapter: ModuleAdapter
     private lateinit var viewModel: ModuleViewModel
 
     override fun onCreateView(
@@ -31,18 +33,23 @@ class ModuleFragment : Fragment(), MyAdapterCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val repository = ModuleRepositoryImpl(requireContext())
-        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ModuleViewModel::class.java]
-
-        adapter = ModuleAdapter(this, viewModel.getModules())
+        adapter = ModuleAdapter { moduleId ->
+            val action = ModuleFragmentDirections.actionModuleFragmentToModuleTabFragment(moduleId)
+            findNavController().navigate(action)
+            Log.d("ModuleId", "Module id: $moduleId")
+        }
         binding.rvModule.adapter = adapter
         binding.rvModule.layoutManager = LinearLayoutManager(activity)
+
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ModuleViewModel::class.java]
+        viewModel.getModules().observe(viewLifecycleOwner) { modules ->
+            binding.rvModule.adapter?.let { adapter ->
+                if (adapter is ModuleAdapter) {
+                    adapter.setItems(modules)
+                }
+            }
+        }
     }
 
-    override fun onButtonClick(id: Int) {
-        val bundle = Bundle()
-        bundle.putInt("moduleId", id)
-        val action = ModuleFragmentDirections.actionModuleFragmentToModuleTabFragment(id)
-        findNavController().navigate(action)
-    }
 }
