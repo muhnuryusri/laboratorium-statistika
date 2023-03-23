@@ -8,6 +8,4 @@ import com.example.laboratorium_statistika.model.ModuleTab
 interface ModuleRepository {
     fun getModules(): LiveData<List<Module>>
     fun getModuleTab(id: Int): LiveData<List<ModuleTab>>
-    fun getDetailModule(id: Int): Module?
-    fun getDetailModuleTab(id: Int): MutableLiveData<ModuleTab?>
 }
