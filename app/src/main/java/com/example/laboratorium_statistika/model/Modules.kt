@@ -15,5 +15,12 @@ data class Module(
 data class ModuleTab(
     var id: Int? = 0,
     var title: String? = null,
-    var description: String? = null
+    var description: String? = null,
+    var analysis: List<AnalysisTab>? = null
+) : Parcelable
+
+@Parcelize
+data class AnalysisTab(
+    var id: Int? = 0,
+    var title: String? = null
 ) : Parcelable
