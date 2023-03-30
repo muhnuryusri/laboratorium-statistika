@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_moduleFragment"
             app:destination="@id/moduleFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_dataAnalysisFragment"
+            app:destination="@id/dataAnalysisFragment" />
     </fragment>
 
     <fragment
@@ -66,7 +69,24 @@
         android:label="fragment_data_analysis"
         tools:layout="@layout/fragment_data_analysis">
 
+        <action
+            android:id="@+id/action_dataAnalysisFragment_to_dialog_fragment"
+            app:destination="@id/dialog_fragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/dialog_fragment"
+        android:name="com.example.laboratorium_statistika.ui.data_analysis.DataAnalysisDialogFragment"
+        android:label="DataAnalysisDialogFragment" >
+        <action
+            android:id="@+id/action_dialog_fragment_to_dataAnalysisFragment"
+            app:destination="@id/dataAnalysisFragment">
+
+            <argument
+                android:name="title"
+                app:argType="string" />
+        </action>
+    </dialog>
 
     <fragment
         android:id="@+id/tableFragment"
