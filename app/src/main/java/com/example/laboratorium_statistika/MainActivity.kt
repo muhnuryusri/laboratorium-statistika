@@ -3,6 +3,7 @@ package com.example.laboratorium_statistika
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Xml
+import androidx.fragment.app.FragmentActivity
 import com.example.laboratorium_statistika.databinding.ActivityMainBinding
 import com.example.laboratorium_statistika.model.Module
 import org.xmlpull.v1.XmlPullParser
