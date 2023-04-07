@@ -5,46 +5,188 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="30dp"
+    android:background="@color/white"
+    android:paddingHorizontal="20dp"
+    android:paddingBottom="20dp"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_modul"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Modul"
-        android:textAllCaps="false"
-        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="20dp"
+        android:lineSpacingExtra="-1sp"
+        android:text="laboratorium statistika."
+        android:textSize="22sp"
+        android:fontFamily="@font/inter_bold"
+        android:textColor="@color/blue" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_analisis_data"
+    <FrameLayout
+        android:id="@+id/btn_module"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Analisis Data"
-        android:textAllCaps="false"
-        android:textSize="20sp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/dashboard_module_img"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_tabel"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Tabel"
-        android:textAllCaps="false"
-        android:textSize="20sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_latihan_soal"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Latihan Soal"
-        android:textAllCaps="false"
-        android:textSize="20sp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:text="Modul"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_panduan"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/round_arrow_circle_right_24"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_data_analysis"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Panduan"
-        android:textAllCaps="false"
-        android:textSize="20sp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/dashboard_data_analysis_img"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:text="Analisis Data"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/round_arrow_circle_right_24"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_table"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/dashboard_table_img"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:text="Tabel"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/round_arrow_circle_right_24"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_exercises"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/dashboard_exercise_img"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:text="Latihan Soal"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/round_arrow_circle_right_24"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_guide"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/dashboard_guide_img"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:text="Panduan"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/round_arrow_circle_right_24"/>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

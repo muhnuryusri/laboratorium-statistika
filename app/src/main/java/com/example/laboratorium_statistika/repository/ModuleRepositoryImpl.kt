@@ -2,13 +2,15 @@ package com.example.laboratorium_statistika.repository
 
 import android.content.Context
 import android.util.Log
-import android.util.Xml
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.laboratorium_statistika.model.AnalysisTab
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import org.json.JSONObject
-import org.xmlpull.v1.XmlPullParser
 
 class ModuleRepositoryImpl(private val context: Context) : ModuleRepository {
     private val jsonString = context.assets.open("modules.json").bufferedReader().use { it.readText() }
@@ -16,55 +18,95 @@ class ModuleRepositoryImpl(private val context: Context) : ModuleRepository {
     override fun getModules(): LiveData<List<Module>> {
         val modulesLiveData = MutableLiveData<List<Module>>()
 
-        val jsonObject = JSONObject(jsonString)
-        val modulesObject = jsonObject.getJSONObject("modules")
-        val moduleArray = modulesObject.getJSONArray("module")
+        val jsonObject = JsonParser.parseString(jsonString).asJsonObject
+        val modulesObject = jsonObject.get("modules").asJsonObject
+        val moduleArray = modulesObject.getAsJsonArray("module")
 
         val moduleList = mutableListOf<Module>()
         val tabList = mutableListOf<ModuleTab>()
 
-        for (i in 0 until moduleArray.length()) {
-            val moduleObject = moduleArray.getJSONObject(i)
+        for (i in 0 until moduleArray.size()) {
+            val moduleObject = moduleArray.get(i).asJsonObject
 
-            val id = moduleObject.getInt("id")
-            val title = moduleObject.getString("title")
-            val description = moduleObject.getString("description")
+            val id = moduleObject.get("id").asInt
+            val title = moduleObject.get("title").asString
+            val description = moduleObject.get("description").asString
 
             val module = Module(id, title, tabList, description)
             moduleList.add(module)
+            Log.d("Test", "Value: $module")
         }
 
         modulesLiveData.value = moduleList
         return modulesLiveData
     }
 
-    override fun getModuleTab(id: Int): LiveData<List<ModuleTab>> {
+    override fun getModuleTab(moduleId: Int): LiveData<List<ModuleTab>> {
         val moduleTabLiveData = MutableLiveData<List<ModuleTab>>()
 
-        val jsonObject = JSONObject(jsonString)
-        val modulesObject = jsonObject.getJSONObject("modules")
-        val moduleArray = modulesObject.getJSONArray("module")
+        val jsonObject = JsonParser.parseString(jsonString).asJsonObject
+        val modulesObject = jsonObject.get("modules").asJsonObject
+        val moduleArray = modulesObject.getAsJsonArray("module")
 
         val tabList = mutableListOf<ModuleTab>()
 
-        for (i in 0 until moduleArray.length()) {
-            val moduleObject = moduleArray.getJSONObject(i)
+        for (i in 0 until moduleArray.size()) {
+            val moduleObject = moduleArray.get(i).asJsonObject
 
-            if (moduleObject.getInt("id") == id) {
-                val tabArray = moduleObject.getJSONArray("tab")
-                for (j in 0 until tabArray.length()) {
-                    val tabObject = tabArray.getJSONObject(j)
+            if (moduleObject.get("id").asInt ==  moduleId) {
+                val tabArray = moduleObject.getAsJsonArray("tab")
+                for (j in 0 until tabArray.size()) {
+                    val tabObject = tabArray.get(j).asJsonObject
                     val tab = ModuleTab(
-                        tabObject.getInt("tab_id"),
-                        tabObject.getString("tab_title"),
-                        tabObject.getString("tab_description")
+                        tabObject.get("tab_id").asInt,
+                        tabObject.get("tab_title").asString,
+                        tabObject.get("tab_description").asString
                     )
                     tabList.add(tab)
+                    Log.d("Test", "Value: $tab")
                 }
             }
         }
 
+
         moduleTabLiveData.value = tabList
         return moduleTabLiveData
+    }
+
+    override fun getAnalysisTab(moduleId: Int, tabId: Int): LiveData<List<AnalysisTab>> {
+        val analysisTabLiveData = MutableLiveData<List<AnalysisTab>>()
+
+        val jsonObject = JsonParser.parseString(jsonString).asJsonObject
+        val modulesObject = jsonObject.get("modules").asJsonObject
+        val moduleArray = modulesObject.getAsJsonArray("module")
+
+        val analysisTabList = mutableListOf<AnalysisTab>()
+
+        for (i in 0 until moduleArray.size()) {
+            val moduleObject = moduleArray.get(i).asJsonObject
+            if (moduleObject.get("id").asInt ==  moduleId) {
+                val tabArray = moduleObject.getAsJsonArray("tab")
+                for (j in 0 until tabArray.size()) {
+                    val tabObject = tabArray.get(j).asJsonObject
+                    if (tabObject.get("tab_id").asInt == tabId) {
+                        val analysisArray = tabObject.getAsJsonArray("analysis_tab")
+                        if (analysisArray != null && analysisArray.size() > 0) {
+                            for (k in 0 until analysisArray.size()) {
+                                val analysisObject = analysisArray.get(k).asJsonObject
+                                val analysisTab = AnalysisTab(
+                                    analysisObject.get("id").asInt,
+                                    analysisObject.get("title").asString
+                                )
+                                analysisTabList.add(analysisTab)
+                                Log.d("Test", "Value: $analysisTab")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        analysisTabLiveData.value = analysisTabList
+        return analysisTabLiveData
     }
 }

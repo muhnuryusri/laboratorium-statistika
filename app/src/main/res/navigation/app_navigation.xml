@@ -72,6 +72,9 @@
         <action
             android:id="@+id/action_dataAnalysisFragment_to_dialog_fragment"
             app:destination="@id/dialog_fragment" />
+        <action
+            android:id="@+id/action_dataAnalysisFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
     </fragment>
 
     <dialog
@@ -98,7 +101,7 @@
 
     <fragment
         android:id="@+id/exercisesFragment"
-        android:name="com.example.laboratorium_statistika.ui.excercises.ExercisesFragment"
+        android:name="com.example.laboratorium_statistika.ui.exercises.ExercisesFragment"
         android:label="fragment_exercises"
         tools:layout="@layout/fragment_exercises">
 

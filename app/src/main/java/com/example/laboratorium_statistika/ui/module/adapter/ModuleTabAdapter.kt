@@ -12,15 +12,16 @@ import com.example.laboratorium_statistika.R
 import com.example.laboratorium_statistika.databinding.ItemModuleBinding
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
+import com.example.laboratorium_statistika.ui.module.ModuleFragmentDirections
+import com.example.laboratorium_statistika.ui.module.tab.ModuleTabFragmentDirections
 
-class ModuleTabAdapter(private val callback: MyAdapterCallback) : RecyclerView.Adapter<ModuleTabAdapter.ViewHolder>() {
+class ModuleTabAdapter(private val fragment: Fragment) : RecyclerView.Adapter<ModuleTabAdapter.ViewHolder>() {
     private val items = mutableListOf<ModuleTab>()
 
     fun setItems(newItems: List<ModuleTab>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
-        Log.d("ModuleAdapter", "Added module tab: $newItems")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,7 +41,12 @@ class ModuleTabAdapter(private val callback: MyAdapterCallback) : RecyclerView.A
         fun bind(item: ModuleTab) {
             binding.btnModul.text = item.title
             binding.btnModul.setOnClickListener {
-                callback.onModuleTabClick(item)
+                item.let { it1 ->
+                    val action = ModuleTabFragmentDirections.actionModuleTabFragmentToModuleDetailFragment(
+                        it1
+                    )
+                    findNavController(fragment).navigate(action)
+                }
             }
         }
     }

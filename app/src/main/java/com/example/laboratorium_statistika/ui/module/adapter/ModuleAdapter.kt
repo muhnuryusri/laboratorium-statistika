@@ -1,19 +1,22 @@
 package com.example.laboratorium_statistika.ui.module.adapter
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.laboratorium_statistika.R
 import com.example.laboratorium_statistika.databinding.ItemModuleBinding
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
+import com.example.laboratorium_statistika.ui.module.ModuleFragmentDirections
 
-class ModuleAdapter(private val callback: MyAdapterCallback) : RecyclerView.Adapter<ModuleAdapter.ViewHolder>() {
+class ModuleAdapter(private val fragment: Fragment) : RecyclerView.Adapter<ModuleAdapter.ViewHolder>() {
     private val items = mutableListOf<Module>()
 
     fun setItems(newItems: List<Module>) {
@@ -39,7 +42,22 @@ class ModuleAdapter(private val callback: MyAdapterCallback) : RecyclerView.Adap
         fun bind(item: Module) {
             binding.btnModul.text = item.title
             binding.btnModul.setOnClickListener {
-                item.id?.let { it1 -> callback.onModuleClick(it1) }
+                val action = if (item.id == 1 || item.id == 5) {
+                    item.let { it1 ->
+                        ModuleFragmentDirections.actionModuleFragmentToModuleDetailFragment(
+                            it1
+                        )
+                    }
+                } else {
+                    item.id?.let { it1 ->
+                        ModuleFragmentDirections.actionModuleFragmentToModuleTabFragment(
+                            it1
+                        )
+                    }
+                }
+                if (action != null) {
+                    findNavController(fragment).navigate(action)
+                }
             }
         }
     }

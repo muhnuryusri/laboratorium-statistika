@@ -11,15 +11,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.laboratorium_statistika.R
 import com.example.laboratorium_statistika.databinding.FragmentDetailModuleBinding
+import com.example.laboratorium_statistika.model.Module
+import com.example.laboratorium_statistika.model.ModuleTab
 import com.example.laboratorium_statistika.repository.ModuleRepositoryImpl
 import com.example.laboratorium_statistika.ui.module.adapter.ModuleAdapter
+import com.example.laboratorium_statistika.ui.module.adapter.ModuleTabAdapter
 import com.example.laboratorium_statistika.ui.module.tab.ModuleTabViewModel
 import com.example.laboratorium_statistika.viewmodel.ModuleViewModelFactory
 
 class DetailModuleFragment : Fragment() {
     private lateinit var binding: FragmentDetailModuleBinding
-    private lateinit var viewModel: DetailModuleViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,14 +32,27 @@ class DetailModuleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val repository = ModuleRepositoryImpl(requireContext())
-        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[DetailModuleViewModel::class.java]
+        val module = arguments?.getParcelable<Module>("module")
+        val moduleTab = arguments?.getParcelable<ModuleTab>("tab")
 
-        val tabId = arguments?.getInt("moduleId", 0) ?: 0
-        Log.d("DetailModuleFragment", "Tab ID: $tabId")
-        viewModel.getDetailModuleTab(tabId).observe(viewLifecycleOwner) { module ->
-            binding.tvTitle.text = module?.title
-            binding.tvDescription.text = module?.description
+        if (module != null) {
+            showModuleDetail(module)
+        } else if (moduleTab != null) {
+            showModuleTabDetail(moduleTab)
+        }
+    }
+
+    private fun showModuleDetail(module: Module?) {
+        binding.apply {
+            tvTitle.text = module?.title
+            tvDescription.text = module?.description
+        }
+    }
+
+    private fun showModuleTabDetail(moduleTab: ModuleTab?) {
+        binding.apply {
+            tvTitle.text = moduleTab?.title
+            tvDescription.text = moduleTab?.description
         }
     }
 }

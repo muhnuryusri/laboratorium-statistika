@@ -13,7 +13,7 @@ class SecondCategoryAdapter(private val listener: OnModuleTabClickListener) : Re
     private var moduleId: Int = 0
 
     interface OnModuleTabClickListener {
-        fun onModuleTabClicked(moduleId: Int, tabId: Int)
+        fun onModuleTabClicked(moduleId: Int, tabId: Int, text: String)
     }
 
     fun setModuleId(moduleId: Int) {
@@ -43,7 +43,11 @@ class SecondCategoryAdapter(private val listener: OnModuleTabClickListener) : Re
         fun bind(item: ModuleTab) {
             binding.tvCategory.text = item.title
             binding.tvCategory.setOnClickListener {
-                item.id?.let { it1 -> listener.onModuleTabClicked(moduleId, it1) }
+                item.id?.let { it1 -> item.title?.let { it2 ->
+                    listener.onModuleTabClicked(moduleId, it1,
+                        it2
+                    )
+                } }
             }
         }
     }

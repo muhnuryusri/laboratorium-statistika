@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.laboratorium_statistika.R
 import com.example.laboratorium_statistika.databinding.FragmentDataAnalysisDialogBinding
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
@@ -33,6 +35,7 @@ class DataAnalysisDialogFragment : DialogFragment(),
     private lateinit var binding: FragmentDataAnalysisDialogBinding
     private lateinit var adapter: RecyclerView.Adapter<*>
     private lateinit var viewModel: AnalysisTabViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,45 +81,35 @@ class DataAnalysisDialogFragment : DialogFragment(),
         }
     }
 
-    override fun onModuleTabClicked(moduleId: Int, tabId: Int) {
+    override fun onModuleTabClicked(moduleId: Int, tabId: Int, text: String) {
         adapter = ThirdCategoryAdapter(this)
         binding.rvDataAnalysis.adapter = adapter
 
         val repository = ModuleRepositoryImpl(requireContext())
         viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[AnalysisTabViewModel::class.java]
         viewModel.getAnalysisTab(moduleId, tabId).observe(viewLifecycleOwner) { analysisTab ->
-            binding.rvDataAnalysis.adapter?.let { adapter ->
-                if (adapter is ThirdCategoryAdapter) {
-                    adapter.setItems(analysisTab)
+            if (analysisTab.isNullOrEmpty()) {
+                sharedViewModel.analysisText.value = when (text) {
+                    "Uji Normalitas" -> "Kolmogorov-Smirnov Test"
+                    "Uji Homogenitas" -> "Levene Test"
+                    "Uji Heterokedasitas" -> "Glesjer Test"
+                    "Uji Autokorelasi" -> "Durbin Watson"
+                    "Uji Multikolinearitas" -> "Variance Inflation Factor (VIF)"
+                    else -> text
+                }
+                dismiss()
+            } else {
+                binding.rvDataAnalysis.adapter?.let { adapter ->
+                    if (adapter is ThirdCategoryAdapter) {
+                        adapter.setItems(analysisTab)
+                    }
                 }
             }
         }
     }
 
     override fun onAnalysisTabClicked(text: String) {
-        val action = DataAnalysisDialogFragmentDirections.actionDialogFragmentToDataAnalysisFragment(text)
-        NavHostFragment.findNavController(this).navigate(action)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = object : Dialog(requireContext()) {
-            @Deprecated("Deprecated in Java")
-            override fun onBackPressed() {
-                when (adapter) {
-                    is ThirdCategoryAdapter -> {
-                        adapter = SecondCategoryAdapter(this@DataAnalysisDialogFragment)
-                        binding.rvDataAnalysis.adapter = adapter
-                    }
-                    is SecondCategoryAdapter -> {
-                        adapter = FirstCategoryAdapter(this@DataAnalysisDialogFragment)
-                        binding.rvDataAnalysis.adapter = adapter
-                    }
-                    else -> {
-                        dismiss()
-                    }
-                }
-            }
-        }
-        return dialog
+        sharedViewModel.analysisText.value = text
+        dismiss()
     }
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/blue" /> <!-- set your desired checked color here -->
+                    <size android:width="24dp" android:height="24dp" />
+                    <corners android:radius="6dp" />
+                </shape>
+            </item>
+            <item android:drawable="@drawable/round_check_24" />
+        </layer-list>
+    </item>
+    <item android:state_checked="false">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <stroke android:width="1dp" android:color="@color/gray_50" /> <!-- set your desired stroke width and color here -->
+                    <size android:width="20dp" android:height="20dp" />
+                    <corners android:radius="6dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <stroke android:width="1dp" android:color="@color/gray_50" /> <!-- set your desired stroke width and color here -->
+                    <size android:width="20dp" android:height="20dp" />
+                    <corners android:radius="6dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

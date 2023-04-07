@@ -1,4 +1,4 @@
-package com.example.laboratorium_statistika.ui.excercises
+package com.example.laboratorium_statistika.ui.exercises
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

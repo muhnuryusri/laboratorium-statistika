@@ -1,8 +1,11 @@
 package com.example.laboratorium_statistika
 
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Xml
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.example.laboratorium_statistika.databinding.ActivityMainBinding
 import com.example.laboratorium_statistika.model.Module
@@ -15,7 +18,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
     }
 }
