@@ -1,31 +1,23 @@
 package com.example.laboratorium_statistika.ui.data_analysis
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
+import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.laboratorium_statistika.R
 import com.example.laboratorium_statistika.databinding.FragmentDataAnalysisDialogBinding
-import com.example.laboratorium_statistika.model.Module
-import com.example.laboratorium_statistika.model.ModuleTab
 import com.example.laboratorium_statistika.repository.ModuleRepositoryImpl
 import com.example.laboratorium_statistika.ui.data_analysis.adapter.FirstCategoryAdapter
 import com.example.laboratorium_statistika.ui.data_analysis.adapter.SecondCategoryAdapter
 import com.example.laboratorium_statistika.ui.data_analysis.adapter.ThirdCategoryAdapter
-import com.example.laboratorium_statistika.ui.module.ModuleViewModel
-import com.example.laboratorium_statistika.ui.module.tab.ModuleTabFragmentDirections
-import com.example.laboratorium_statistika.ui.module.tab.ModuleTabViewModel
 import com.example.laboratorium_statistika.viewmodel.ModuleViewModelFactory
+import java.util.*
 
 class DataAnalysisDialogFragment : DialogFragment(),
     FirstCategoryAdapter.OnModuleClickListener,
@@ -34,7 +26,10 @@ class DataAnalysisDialogFragment : DialogFragment(),
 {
     private lateinit var binding: FragmentDataAnalysisDialogBinding
     private lateinit var adapter: RecyclerView.Adapter<*>
+    private lateinit var currentAdapter: RecyclerView.Adapter<*>
+    private lateinit var previousAdapter: RecyclerView.Adapter<*>
     private lateinit var viewModel: AnalysisTabViewModel
+    private val adapterStack = Stack<RecyclerView.Adapter<*>>()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -51,6 +46,7 @@ class DataAnalysisDialogFragment : DialogFragment(),
         adapter = FirstCategoryAdapter(this)
         binding.rvDataAnalysis.adapter = adapter
         binding.rvDataAnalysis.layoutManager = LinearLayoutManager(activity)
+        currentAdapter = adapter
 
         val repository = ModuleRepositoryImpl(requireContext())
 
@@ -62,11 +58,37 @@ class DataAnalysisDialogFragment : DialogFragment(),
                 }
             }
         }
+
+        binding.imgBackButton.setOnClickListener {
+            if (adapterStack.isNotEmpty()) {
+                currentAdapter = adapterStack.pop()
+                binding.rvDataAnalysis.adapter = currentAdapter
+
+                // Hide the back button if we are back to the first adapter
+                if (adapterStack.isEmpty()) {
+                    binding.imgBackButton.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+
+        val window = dialog.window
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        return dialog
     }
 
     override fun onModuleClicked(moduleId: Int) {
-        adapter = SecondCategoryAdapter(this)
+        binding.imgBackButton.visibility = View.VISIBLE
+
+        previousAdapter = currentAdapter
+        adapterStack.push(currentAdapter)
+        adapter = SecondCategoryAdapter(this, sharedViewModel)
         binding.rvDataAnalysis.adapter = adapter
+        currentAdapter = adapter
 
         val repository = ModuleRepositoryImpl(requireContext())
         viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[AnalysisTabViewModel::class.java]
@@ -82,21 +104,19 @@ class DataAnalysisDialogFragment : DialogFragment(),
     }
 
     override fun onModuleTabClicked(moduleId: Int, tabId: Int, text: String) {
-        adapter = ThirdCategoryAdapter(this)
+        binding.imgBackButton.visibility = View.VISIBLE
+
+        previousAdapter = currentAdapter
+        adapterStack.push(currentAdapter)
+        adapter = ThirdCategoryAdapter(this, sharedViewModel)
         binding.rvDataAnalysis.adapter = adapter
+        currentAdapter = adapter
 
         val repository = ModuleRepositoryImpl(requireContext())
         viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[AnalysisTabViewModel::class.java]
         viewModel.getAnalysisTab(moduleId, tabId).observe(viewLifecycleOwner) { analysisTab ->
             if (analysisTab.isNullOrEmpty()) {
-                sharedViewModel.analysisText.value = when (text) {
-                    "Uji Normalitas" -> "Kolmogorov-Smirnov Test"
-                    "Uji Homogenitas" -> "Levene Test"
-                    "Uji Heterokedasitas" -> "Glesjer Test"
-                    "Uji Autokorelasi" -> "Durbin Watson"
-                    "Uji Multikolinearitas" -> "Variance Inflation Factor (VIF)"
-                    else -> text
-                }
+                sharedViewModel.analysisText.value = text
                 dismiss()
             } else {
                 binding.rvDataAnalysis.adapter?.let { adapter ->
@@ -107,6 +127,7 @@ class DataAnalysisDialogFragment : DialogFragment(),
             }
         }
     }
+
 
     override fun onAnalysisTabClicked(text: String) {
         sharedViewModel.analysisText.value = text

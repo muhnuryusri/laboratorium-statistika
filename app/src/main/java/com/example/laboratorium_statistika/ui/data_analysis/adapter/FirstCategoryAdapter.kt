@@ -37,11 +37,12 @@ class FirstCategoryAdapter(private val listener: OnModuleClickListener) : Recycl
 
     inner class ViewHolder(private val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Module) {
-            binding.tvCategory.text = item.title
-            binding.tvCategory.setOnClickListener {
-                item.id?.let { it1 -> listener.onModuleClicked(it1) }
+            binding.apply {
+                tvCategory.text = item.title
+                tvCategory.setOnClickListener {
+                    item.id?.let { it1 -> listener.onModuleClicked(it1) }
+                }
             }
-            binding.viewLine.visibility = View.GONE
         }
     }
 }

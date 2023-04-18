@@ -24,3 +24,14 @@ data class AnalysisTab(
     var id: Int? = 0,
     var title: String? = null
 ) : Parcelable
+
+@Parcelize
+data class DataAnalysisResult(
+    var id: Int? = 0,
+    var resultTitle: String? = null,
+    var resultData: String? = null,
+    var descriptiveTitle: String? = null,
+    var descriptiveContent: String? = null,
+    var testValuesContent: String? = null,
+    var resultConclusion: String? = null
+) : Parcelable

@@ -7,43 +7,26 @@
     android:orientation="vertical"
     tools:context=".ui.data_analysis.DataAnalysisFragment">
 
-    <LinearLayout
-        android:id="@+id/back_button"
+    <TextView
+        android:id="@+id/back_button_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start|center"
-        android:orientation="horizontal"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingHorizontal="20dp"
+        android:layout_marginStart="20dp"
+        android:drawablePadding="20dp"
+        android:fontFamily="@font/inter_semibold"
+        android:text="Kembali"
+        android:textColor="@color/blue"
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/round_arrow_back_ios_new_24"
+        app:drawableTint="@color/blue"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/back_button_icon"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/round_arrow_back_ios_new_24"
-            app:tint="@color/blue" />
-
-        <TextView
-            android:id="@+id/back_button_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/back_button_icon"
-            android:fontFamily="@font/inter_semibold"
-            android:text="Kembali"
-            android:textColor="@color/blue"
-            android:textSize="14sp" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/main_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/back_button">
+        app:layout_constraintTop_toBottomOf="@+id/back_button_text">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,54 +46,41 @@
                 android:textSize="22sp" />
 
             <LinearLayout
+                android:id="@+id/btn_select_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:padding="13dp"
+                android:background="@drawable/custom_round_background"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true">
 
-                <LinearLayout
-                    android:id="@+id/btn_select_data"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/round_format_list_bulleted_24"
+                    app:tint="@color/neutral_black"
+                    android:contentDescription="@string/select_analysis_method" />
+
+                <TextView
+                    android:id="@+id/tv_select_data"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="13dp"
-                    android:background="@drawable/custom_round_background"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/select_analysis_method"
+                    android:fontFamily="@font/inter"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/gray_70"
+                    android:textSize="15sp" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/round_format_list_bulleted_24"
-                        app:tint="@color/neutral_black" />
-
-                    <TextView
-                        android:id="@+id/tv_select_data"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:text="Pilih metode analisis data"
-                        android:fontFamily="@font/inter"
-                        android:textAlignment="textStart"
-                        android:textColor="@color/gray_70"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/round_keyboard_arrow_down_24"
-                        app:tint="@color/neutral_black" />
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/edt_data_alpha"
-                    android:layout_width="60dp"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_column="2"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:hint="α"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:visibility="gone" />
+                    android:src="@drawable/round_keyboard_arrow_down_24"
+                    app:tint="@color/neutral_black"
+                    android:contentDescription="@string/select_analysis_method" />
             </LinearLayout>
 
             <View
@@ -141,6 +111,35 @@
                 app:drawableStartCompat="@drawable/round_info_24"
                 app:drawableTint="@color/yellow"
                 android:drawablePadding="5dp"/>
+
+            <EditText
+                android:id="@+id/edt_data_alpha"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="start"
+                android:padding="13dp"
+                android:background="@drawable/custom_round_background"
+                android:hint="Nilai signifikansi"
+                android:fontFamily="@font/inter"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:drawableStart="@drawable/round_alpha_24"
+                android:drawableTint="@color/neutral_black"
+                android:drawablePadding="18dp"/>
+
+            <EditText
+                android:id="@+id/edt_data_population_mean"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="start"
+                android:padding="13dp"
+                android:background="@drawable/custom_round_background"
+                android:hint="Rata-rata populasi"
+                android:fontFamily="@font/inter"
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
             <TableLayout
                 android:id="@+id/table_layout"
@@ -176,7 +175,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="3"
-                        android:inputType="number"
                         android:padding="12dp"
                         android:background="@drawable/custom_round_background"
                         android:hint="Data"
@@ -202,6 +200,61 @@
                 app:iconGravity="textStart"
                 app:backgroundTint="@null" />
 
+            <LinearLayout
+                android:id="@+id/layout_description_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Metode ini menggunakan "
+                    android:textAlignment="textStart"
+                    android:textColor="@color/neutral_black"
+                    android:fontFamily="@font/inter"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textAlignment="textStart"
+                    android:textColor="@color/neutral_black"
+                    android:fontFamily="@font/inter"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_selected_data_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data terpilih: "
+                    android:textAlignment="textStart"
+                    android:textColor="@color/neutral_black"
+                    android:fontFamily="@font/inter"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/tv_selected_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textAlignment="textStart"
+                    android:textColor="@color/blue"
+                    android:fontFamily="@font/inter_semibold"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_delete"
                 android:layout_width="match_parent"
@@ -214,6 +267,8 @@
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:letterSpacing="0"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
                 app:icon="@drawable/round_delete_24"
                 app:iconTint="@color/white"
                 app:iconGravity="textStart"
@@ -240,47 +295,125 @@
     </ScrollView>
 
     <FrameLayout
-        android:id="@+id/result_frame_layout"
+        android:id="@+id/layout_result_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:clickable="true"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_50" />
 
         <LinearLayout
+            android:id="@+id/layout_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
+            <TextView
+                android:id="@+id/tv_result"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_50"/>
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:text="Hasil"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="@color/blue"
+                android:textSize="18sp"
+                app:drawableEndCompat="@drawable/round_keyboard_arrow_up_24"
+                app:drawableTint="@color/blue" />
 
-            <ScrollView
+            <LinearLayout
+                android:id="@+id/layout_result_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="20dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
-                    android:id="@+id/layout_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_delete_result"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/custom_delete_button"
+                        android:backgroundTint="@color/red_surface"
+                        android:text="Hapus"
+                        android:fontFamily="@font/inter_medium"
+                        android:textAllCaps="false"
+                        android:textColor="@color/red_main"
+                        android:textSize="14sp"
+                        android:letterSpacing="0"
+                        android:stateListAnimator="@null"
+                        app:icon="@drawable/round_delete_24"
+                        app:iconSize="16dp"
+                        app:iconTint="@color/red_main"
+                        app:iconGravity="textStart"
+                        app:backgroundTint="@null" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_save_result"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_run_button"
+                        android:backgroundTint="@color/green_surface"
+                        android:text="Simpan"
+                        android:fontFamily="@font/inter_medium"
+                        android:textAllCaps="false"
+                        android:textColor="@color/green_main"
+                        android:textSize="14sp"
+                        android:letterSpacing="0"
+                        android:stateListAnimator="@null"
+                        app:icon="@drawable/round_save_alt_24"
+                        app:iconSize="16dp"
+                        app:iconTint="@color/green_main"
+                        app:iconGravity="textStart"
+                        app:backgroundTint="@null" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/gray_50" />
+
+                <LinearLayout
+                    android:id="@+id/result_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_result"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hasil"
-                        android:fontFamily="@font/inter_bold"
-                        android:textColor="@color/blue"
-                        android:textSize="16sp"
-                        app:drawableEndCompat="@drawable/round_keyboard_arrow_up_24"
-                        app:drawableTint="@color/blue" />
+                        tools:listitem="@layout/item_result"/>
                 </LinearLayout>
-            </ScrollView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/layout_result_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="100dp"
+                android:text="Jalankan analisis data terlebih dahulu."
+                android:fontFamily="@font/inter_medium"
+                android:textColor="@color/gray_50"
+                android:textAlignment="center"
+                android:drawablePadding="14dp"
+                app:drawableTopCompat="@drawable/image_empty_state" />
         </LinearLayout>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

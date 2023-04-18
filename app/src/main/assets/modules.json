@@ -76,7 +76,7 @@
             },
             {
               "tab_id": 5,
-              "tab_title": "Uji Multikolienaritas",
+              "tab_title": "Uji Multikolinieritas",
               "tab_description": "Uji multikolinieritas diperlukan untuk mengetahui ada tidaknya variabel independen yang memiliki kemiripan antar variabel independen dalam suatu model. Oleh karena itu, multikolinearitas tidak terjadi pada regresi linear sederhana yang hanya melibatkan datu variabel independen. Adanya hubungan diantara variabel bebasadalah hal yang tak bisa dihindari dan memang diperlukan agar regresi yang diperoleh bersifat valid.\nNamun, hubungan yang bersifat linier harus dihindari karena akan menimbulkan gagal estimasi (multikolinearitas sempurna) atau sulit dalam inferensi (multikolinearitas tidak sempurna). Jika dalam model terdapat multikolinearitas maka model tersebut memiliki kesalahan standar yang besar sehingga koefisien tidak dapat ditaksir dengan ketepatan yang tinggi."
             }
           ],

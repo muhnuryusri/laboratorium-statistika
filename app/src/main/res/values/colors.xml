@@ -12,7 +12,12 @@
     <color name="gray_40">#E6E6E6</color>
     <color name="gray_50">#CECECE</color>
     <color name="gray_70">#919191</color>
+    <color name="gray_90">#666666</color>
     <color name="blue">#3347B0</color>
+    <color name="blue_surface">#F7F8FC</color>
     <color name="yellow">#CD7B2E</color>
-    <color name="red">#CB3A31</color>
+    <color name="red_main">#CB3A31</color>
+    <color name="red_surface">#FDF7F7</color>
+    <color name="green_main">#43936C</color>
+    <color name="green_surface">#F7FBF9</color>
 </resources>

@@ -39,13 +39,18 @@ class ModuleTabAdapter(private val fragment: Fragment) : RecyclerView.Adapter<Mo
 
     inner class ViewHolder(private val binding: ItemModuleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ModuleTab) {
-            binding.btnModul.text = item.title
-            binding.btnModul.setOnClickListener {
-                item.let { it1 ->
-                    val action = ModuleTabFragmentDirections.actionModuleTabFragmentToModuleDetailFragment(
-                        it1
-                    )
-                    findNavController(fragment).navigate(action)
+            binding.apply {
+                btnModul.apply {
+                    text = item.title
+                    setOnClickListener {
+                        item.let { it1 ->
+                            val action =
+                                ModuleTabFragmentDirections.actionModuleTabFragmentToModuleDetailFragment(
+                                    it1
+                                )
+                            findNavController(fragment).navigate(action)
+                        }
+                    }
                 }
             }
         }

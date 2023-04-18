@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingHorizontal="20dp"
-    android:paddingVertical="5dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
-        android:padding="15dp"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
-
-    <View
-        android:id="@+id/view_line"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/black" />
+        android:text="@string/test"
+        android:padding="14dp"
+        android:textColor="@color/gray_90"
+        android:textSize="14sp"
+        android:fontFamily="@font/inter"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        app:drawableTint="@color/gray_90"
+        android:drawablePadding="50dp"
+        app:drawableEndCompat="@drawable/ic_round_keyboard_arrow_right_24" />
 </LinearLayout>

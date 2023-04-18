@@ -1,37 +1,52 @@
 package com.example.laboratorium_statistika.ui.data_analysis
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.app.ActionBar.LayoutParams
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.animation.DecelerateInterpolator
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.marginEnd
-import androidx.core.view.marginStart
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.laboratorium_statistika.R
 import com.example.laboratorium_statistika.databinding.FragmentDataAnalysisBinding
-import org.apache.commons.math3.stat.StatUtils
-import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression
+import com.example.laboratorium_statistika.model.DataAnalysisResult
+import com.example.laboratorium_statistika.repository.ModuleRepositoryImpl
+import com.example.laboratorium_statistika.ui.data_analysis.adapter.ResultAdapter
+import com.example.laboratorium_statistika.ui.module.adapter.ModuleTabAdapter
+import com.example.laboratorium_statistika.ui.module.tab.ModuleTabViewModel
+import com.example.laboratorium_statistika.viewmodel.ModuleViewModelFactory
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import org.apache.commons.math3.distribution.FDistribution
+import org.apache.commons.math3.distribution.TDistribution
+import org.apache.commons.math3.special.Gamma.gamma
+import org.apache.commons.math3.stat.inference.TTest
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import kotlin.math.*
 
 class DataAnalysisFragment : Fragment() {
     private lateinit var binding: FragmentDataAnalysisBinding
+    private lateinit var adapter: ResultAdapter
+    private lateinit var viewModel: ResultViewModel
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private var hideTestValues = false
+    private var runCount = 0
+    private val Int.dp: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,18 +58,24 @@ class DataAnalysisFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.backButton.setOnClickListener {
+        binding.layoutDescriptionContainer.visibility = View.GONE
+        binding.btnRun.isEnabled = false
+
+        binding.backButtonText.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.btnSelectData.setOnClickListener {
-            val action = DataAnalysisFragmentDirections.actionDataAnalysisFragmentToDialogFragment()
-            findNavController().navigate(action)
+            val currentDestination = findNavController().currentDestination?.id
+            if (currentDestination == R.id.dataAnalysisFragment) {
+                val action = DataAnalysisFragmentDirections.actionDataAnalysisFragmentToDialogFragment()
+                findNavController().navigate(action)
+            }
         }
 
         sharedViewModel.analysisText.observe(viewLifecycleOwner, Observer { text ->
             if (text.isNullOrEmpty()) {
-                binding.tvSelectData.text = "Pilih metode analisis data"
+                binding.tvSelectData.text = getString(R.string.select_analysis_method)
             } else {
                 binding.apply {
                     tvSelectData.text = text
@@ -62,14 +83,34 @@ class DataAnalysisFragment : Fragment() {
                 }
             }
 
-            binding.btnRun.isEnabled = text != "Pilih metode analisis data"
+            binding.btnRun.isEnabled = text != getString(R.string.select_analysis_method)
 
-            if (text == "Kolmogorov-Smirnov Test" || text == "Levene Test" || text == "Glesjer Test") {
+            // Masih perlu di perbaiki
+            if (text == "Uji Normalitas" || text == "Uji Homogenitas" || text == "Uji Heterokedasitas" || text == "One Sample T-Test" || text == "Paired Sample T-Test" || text == "Independent Sample T-Test") {
                 binding.edtDataAlpha.visibility = View.VISIBLE
             } else {
                 binding.edtDataAlpha.visibility = View.GONE
             }
+
+            // Masih perlu di perbaiki
+            if (text == "One Sample T-Test") {
+                binding.edtDataPopulationMean.visibility = View.VISIBLE
+            } else {
+                binding.edtDataPopulationMean.visibility = View.GONE
+            }
+
+            binding.layoutDescriptionContainer.visibility = View.VISIBLE
+            // Masih perlu di perbaiki
+            if (text == "Uji Homogenitas") {
+                binding.tvDescription.text = "2 data."
+            } else {
+                binding.tvDescription.text = "1 data."
+            }
         })
+
+        adapter = ResultAdapter(hideTestValues)
+        binding.rvResult.adapter = adapter
+        binding.rvResult.layoutManager = LinearLayoutManager(activity)
 
         binding.btnAddData.setOnClickListener {
             val id = View.generateViewId()
@@ -80,6 +121,9 @@ class DataAnalysisFragment : Fragment() {
         binding.btnRun.setOnClickListener {
             var hasCheckedBox = false
             val selectedCheckBoxes = mutableListOf<CheckBox>()
+
+            binding.layoutResultEmpty.visibility = View.GONE
+            binding.layoutResultContent.visibility = View.VISIBLE
 
             for (i in 0 until binding.tableLayout.childCount) {
                 val tableRow = binding.tableLayout.getChildAt(i) as TableRow
@@ -98,20 +142,25 @@ class DataAnalysisFragment : Fragment() {
                         val edtDataValue2 = (tableRow2.getChildAt(2) as EditText).text.toString().trim()
                         val edtDataAlpha = binding.edtDataAlpha.text.toString()
 
-                        // Pindahkan di luar fungsi onClickListener jika hanya ingin hasilnya diupdate (Bukan menambah hasil baru)
-                        val textViewName = TextView(requireActivity())
-                        val textViewValue = TextView(requireActivity())
+                        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+                        val layoutParams = binding.layoutResultContainer.layoutParams
+                        layoutParams.height = screenHeight / 2
+                        binding.tvResult.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.round_keyboard_arrow_down_24, 0)
 
                         when (binding.tvSelectData.text) {
-                            "Pilih metode analisis data" -> Toast.makeText(requireActivity(), "Pilih data terlebih dahulu!", Toast.LENGTH_SHORT).show()
+                            getString(R.string.select_analysis_method) -> Toast.makeText(requireActivity(), "Pilih data terlebih dahulu!", Toast.LENGTH_SHORT).show()
 
-                            "Levene Test" -> calculateLeveneTest(edtDataAlpha, edtDataName1, edtDataName2, edtDataValue1, edtDataValue2, textViewName, textViewValue)
-                            }
+
+                            "Uji Homogenitas" -> calculateLeveneTest(edtDataAlpha, edtDataName1, edtDataValue1, edtDataName2, edtDataValue2)
+                            "Paired Sample T-Test" -> calculatePairedTTest(edtDataAlpha, edtDataName1, edtDataValue1, edtDataName2, edtDataValue2)
+                            "Independent Sample T-Test" -> calculateIndependentSampleTTest(edtDataAlpha, edtDataName1, edtDataValue1, edtDataName2, edtDataValue2)
+                        }
                     } else if (selectedCheckBoxes.size == 1) {
                         val tableRowSingle = selectedCheckBoxes[0].parent as TableRow
                         val edtDataName = (tableRowSingle.getChildAt(1) as EditText).text.toString()
                         val edtDataValue = (tableRowSingle.getChildAt(2) as EditText).text.toString().trim()
                         val edtDataAlpha = binding.edtDataAlpha.text.toString()
+                        val edtDataPopulationMean = binding.edtDataPopulationMean.text.toString()
 
                         val pattern = Regex("[^\\d\\s.]+")
                         if (pattern.containsMatchIn(edtDataValue)) {
@@ -124,22 +173,26 @@ class DataAnalysisFragment : Fragment() {
                             return@setOnClickListener
                         }
 
-                        val textViewName = TextView(requireActivity())
-                        val textViewValue = TextView(requireActivity())
+                        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+                        val layoutParams = binding.layoutResultContainer.layoutParams
+                        layoutParams.height = screenHeight / 2
+                        binding.tvResult.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.round_keyboard_arrow_down_24, 0)
 
                         when (binding.tvSelectData.text) {
-                            "Pilih metode analisis data" -> Toast.makeText(requireActivity(), "Pilih data terlebih dahulu!", Toast.LENGTH_SHORT).show()
+                            getString(R.string.select_analysis_method) -> Toast.makeText(requireActivity(), "Pilih data terlebih dahulu!", Toast.LENGTH_SHORT).show()
 
-                            "Rata-rata" -> calculateDeskriptifData("Rata-rata", edtDataName, edtDataValue, textViewName, textViewValue)
-                            "Median" -> calculateDeskriptifData("Median", edtDataName, edtDataValue, textViewName, textViewValue)
-                            "Modus" -> calculateDeskriptifData("Modus", edtDataName, edtDataValue, textViewName, textViewValue)
-                            "Range" -> calculateDeskriptifData("Range", edtDataName, edtDataValue, textViewName, textViewValue)
-                            "Ragam" -> calculateDeskriptifData("Ragam", edtDataName, edtDataValue, textViewName, textViewValue)
-                            "Simpangan Baku" -> calculateDeskriptifData("Simpangan Baku", edtDataName, edtDataValue, textViewName, textViewValue)
-                            "Kuartil" -> calculateDeskriptifData("Kuartil", edtDataName, edtDataValue, textViewName, textViewValue)
+                            "Rata-rata" -> calculateDeskriptifData("Rata-rata", edtDataName, edtDataValue)
+                            "Median" -> calculateDeskriptifData("Median", edtDataName, edtDataValue)
+                            "Modus" -> calculateDeskriptifData("Modus", edtDataName, edtDataValue)
+                            "Range" -> calculateDeskriptifData("Range", edtDataName, edtDataValue)
+                            "Ragam" -> calculateDeskriptifData("Ragam", edtDataName, edtDataValue)
+                            "Simpangan Baku" -> calculateDeskriptifData("Simpangan Baku", edtDataName, edtDataValue)
+                            "Kuartil" -> calculateDeskriptifData("Kuartil", edtDataName, edtDataValue)
 
-                            "Kolmogorov-Smirnov Test" -> calculateKolmogorovSmirnovTest(edtDataAlpha, edtDataName, edtDataValue, textViewName, textViewValue)
-                            "Glesjer Test" -> calculateGlesjerTest(edtDataAlpha, edtDataName, edtDataValue, textViewName, textViewValue)
+                            "Uji Normalitas" -> calculateKolmogorovSmirnovTest(edtDataAlpha, edtDataName, edtDataValue)
+                            "Uji Heterokedasitas" -> calculateGlesjerTest(edtDataAlpha, edtDataName, edtDataValue)
+                            "Uji Multikolinieritas" -> calculateVIF(edtDataName, edtDataValue)
+                            "One Sample T-Test" -> calculateOneSampleTTest(edtDataAlpha, edtDataPopulationMean, edtDataName, edtDataValue)
                         }
                     }
                 }
@@ -150,34 +203,70 @@ class DataAnalysisFragment : Fragment() {
             }
         }
 
-        binding.resultFrameLayout.setOnClickListener(object : View.OnClickListener {
-            var isExpanded = false
-            val displayMetrics = resources.displayMetrics
-            val screenHeight = displayMetrics.heightPixels
-            val halfScreenHeight = screenHeight / 2
-
-            override fun onClick(v: View?) {
-                if (isExpanded) {
-                    // shrink the layout
-                    binding.resultFrameLayout.layoutParams.height = 200 // or any desired collapsed height
-                    isExpanded = false
-                } else {
-                    // expand the layout
-                    binding.resultFrameLayout.layoutParams.height = 500 // or any desired expanded height
-                    isExpanded = true
-                }
-                binding.resultFrameLayout.requestLayout()
+        var resultLayoutHeight = 0
+        binding.layoutResult.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.layoutResult.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                resultLayoutHeight = binding.layoutResult.height
             }
         })
+
+        binding.tvResult.post {
+            val layoutParams = binding.layoutResultContainer.layoutParams
+            layoutParams.height = binding.tvResult.height
+            binding.layoutResultContainer.layoutParams = layoutParams
+        }
+
+        binding.tvResult.setOnClickListener {
+            val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+            val layoutParams = binding.layoutResultContainer.layoutParams
+            val measureSpec = View.MeasureSpec.makeMeasureSpec(screenHeight, View.MeasureSpec.AT_MOST)
+            binding.layoutResult.measure(measureSpec, measureSpec)
+
+            val animator = if (layoutParams.height == binding.tvResult.height) {
+                ValueAnimator.ofInt(binding.tvResult.height, binding.layoutResult.measuredHeight)
+            } else {
+                ValueAnimator.ofInt(binding.layoutResultContainer.measuredHeight, binding.tvResult.height)
+            }
+
+            animator.addUpdateListener {
+                val value = it.animatedValue as Int
+                layoutParams.height = value
+                binding.layoutResultContainer.layoutParams = layoutParams
+                binding.layoutResultContainer.invalidate() // <-- call invalidate() instead of requestLayout()
+            }
+
+            animator.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    if (layoutParams.height == binding.tvResult.height) {
+                        binding.tvResult.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.round_keyboard_arrow_up_24, 0)
+                    } else {
+                        binding.tvResult.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.round_keyboard_arrow_down_24, 0)
+                    }
+                }
+            })
+
+            animator.duration = 300
+            animator.start()
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onResume() {
+        super.onResume()
+
         sharedViewModel.analysisText.value = null
+        binding.btnRun.isEnabled = false
+        binding.layoutDescriptionContainer.visibility = View.GONE
+        binding.edtDataAlpha.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")
-    private fun calculateDeskriptifData(analysis: String, edtDataName: String, edtDataValue: String, textViewName: TextView, textViewValue: TextView) {
+    private fun calculateDeskriptifData(
+        analysis: String,
+        edtDataName: String,
+        edtDataValue: String
+    ) {
+        runCount++
         val dataValue = edtDataValue.split(" ").map { it.toDouble() }.toDoubleArray()
 
         // Mean
@@ -209,29 +298,43 @@ class DataAnalysisFragment : Fragment() {
         val quartile3 = dataValue.sorted()[3 * dataValue.size / 4]
         val iqr = quartile3 - quartile1
 
-        textViewName.text = "Data : $edtDataName"
-        when (analysis) {
-            "Rata-rata" -> textViewValue.text = "Mean : $mean"
-            "Median" -> textViewValue.text = "Median : $median"
-            "Modus" -> textViewValue.text = "Modus : $modus"
-            "Range" -> textViewValue.text = "Range : $range"
-            "Ragam" -> textViewValue.text = "Ragam : $variance"
-            "Simpangan Baku" -> textViewValue.text = "Simpangan Baku Populasi (Deviation): $deviation\nSimpangan Baku Sample (Standard Deviation): $standardDeviation"
-            "Kuartil" -> textViewValue.text = "Kuartil Bawah (Q1) : $quartile1\nKuartil Tengah (Q2) : $quartile2\nKuartil Atas (Q3) : $quartile3\nInterkuartil Range (IQR) : $iqr"
-        }
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName",
+            descriptiveTitle = "$edtDataName descriptive:",
+            descriptiveContent = "n: ${dataValue.size}; " + when (analysis) {
+                "Rata-rata" -> "Mean: $mean"
+                "Median" -> "Median: $median"
+                "Modus" -> "Modus: $modus"
+                "Range" -> "Range: $range"
+                "Ragam" -> "Ragam: $variance"
+                "Simpangan Baku" -> "Simpangan Baku Populasi (Deviation): $deviation\nSimpangan Baku Sample (Standard Deviation): $standardDeviation"
+                "Kuartil" -> "Kuartil Bawah (Q1)\t\t\t\t\t\t: $quartile1\nKuartil Tengah (Q2)\t\t\t\t\t: $quartile2\nKuartil Atas (Q3)\t\t\t\t\t\t\t: $quartile3\nInterkuartil Range (IQR)\t: $iqr"
+                else -> ""
+            }
+        )
 
-        if (textViewValue.parent == null) {
-            binding.layoutResult.addView(textViewName)
-            binding.layoutResult.addView(textViewValue)
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(true)
+                    adapter.setItems(results)
+                }
+            }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun calculateKolmogorovSmirnovTest(edtDataAlpha: String, edtDataName: String, edtDataValue: String, textViewName: TextView, textViewValue: TextView) {
+    private fun calculateKolmogorovSmirnovTest(edtDataAlpha: String, edtDataName: String, edtDataValue: String) {
+        runCount++
         val dataValue = edtDataValue.split(" ").map { it.toDouble() }.toDoubleArray()
         val alpha = edtDataAlpha.toDoubleOrNull()
 
         if (alpha == null) {
+            runCount
             Toast.makeText(requireActivity(), "Masukkan nilai alpha", Toast.LENGTH_SHORT).show()
             return
         }
@@ -242,6 +345,9 @@ class DataAnalysisFragment : Fragment() {
         // Menghitung jumlah data dan nilai rata-rata
         val n = dataValue.size
         val mean = dataValue.average()
+
+        // Menghitung standard deviation dari data
+        val deviation = sqrt(dataValue.sumOf { (it - dataValue.average()).pow(2.0) } / (dataValue.size))
 
         // Menghitung nilai CDF dari setiap data point
         val cdf = DoubleArray(n)
@@ -269,21 +375,29 @@ class DataAnalysisFragment : Fragment() {
         // Menentukan nilai kritis dengan alpha = 0.05 dan menghitung apakah D melebihi nilai kritis
         val pValue = sqrt(-0.5 * ln(alpha / 2)) / sqrt(n.toDouble())
 
-        textViewName.text = "Data : $edtDataName"
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName",
+            descriptiveTitle = "$edtDataName descriptive:",
+            descriptiveContent = "n: $n; Mean : $mean; SD: $deviation",
+            testValuesContent = "D-Value: $dValue\np-Value: $pValue\n",
+            resultConclusion = if (dValue <= pValue) {
+                "Hipotesis nol diterima.\nData terdistribusi dengan normal (α = $alpha)"
+            } else {
+                "Hipotesis nol ditolak.\nData tidak terdistribusi dengan normal (α = $alpha)"
+            }
+        )
 
-        // Menampilkan hasil uji statistik dan nilai kritis
-        // Menentukan apakah hipotesis nol diterima atau ditolak
-        textViewValue.text =
-            "Uji statistik (D-Value): $dValue\nNilai kritis (p-Value): $pValue\n" +
-                    if (dValue <= pValue) {
-                        "Hipotesis nol diterima.\nData terdistribusi dengan normal (α = $alpha)"
-                    } else {
-                        "Hipotesis nol ditolak.\nData tidak terdistribusi dengan normal (α = $alpha)"
-                    }
-
-        if (textViewValue.parent == null) {
-            binding.layoutResult.addView(textViewName)
-            binding.layoutResult.addView(textViewValue)
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(false)
+                    adapter.setItems(results)
+                }
+            }
         }
     }
 
@@ -304,102 +418,85 @@ class DataAnalysisFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun calculateLeveneTest(edtDataAlpha: String, edtDataName1: String, edtDataName2: String, edtDataValue1: String, edtDataValue2: String, textViewName: TextView, textViewValue: TextView) {
+    private fun calculateLeveneTest(edtDataAlpha: String, edtDataName1: String, edtDataValue1: String, edtDataName2: String, edtDataValue2: String) {
+        runCount++
         val dataValue1 = edtDataValue1.split(" ").map { it.toDouble() }.toDoubleArray()
         val dataValue2 = edtDataValue2.split(" ").map { it.toDouble() }.toDoubleArray()
         val alpha = edtDataAlpha.toDoubleOrNull()
 
-        val mean1 = dataValue1.average()
-        val mean2 = dataValue2.average()
-
-        // Calculate deviations from the mean for each sample
-        val deviations1 = dataValue1.map { it - mean1 }
-        val deviations2 = dataValue2.map { it - mean2 }
-
-        // Calculate the absolute deviations
-        val absDeviations1 = deviations1.map { it.absoluteValue }
-        val absDeviations2 = deviations2.map { it.absoluteValue }
-
-        // Calculate the median of the absolute deviations
-        val median1 = absDeviations1.sorted()[dataValue1.size / 2]
-        val median2 = absDeviations2.sorted()[dataValue2.size / 2]
-
-        // Calculate the Levene test statistic
-        val numerator = ((deviations1.map { it.pow(2) }.sum() / (dataValue1.size - 1)) + (deviations2.map { it.pow(2) }.sum() / (dataValue2.size - 1)))
-        val denominator = ((median1.pow(2) * (dataValue1.size - 1) / dataValue1.size) + (median2.pow(2) * (dataValue2.size - 1) / dataValue2.size))
-        val leveneStat = numerator / denominator
-
-        // Calculate the degrees of freedom
-        val df1 = dataValue1.size - 1
-        val df2 = dataValue2.size - 1
-
-        // Calculate the p-value using an F distribution
-        val pValue = fDist(leveneStat, df1, df2)
-
-        textViewName.text = "Data 1 : $edtDataName1\nData 2 : $edtDataName2"
-        textViewValue.text =
-            "Levene Test : $leveneStat\n" +
-                    if (pValue < alpha!!) {
-                        "Terdapat perbedaan signifikan antara varian kedua kelompok"
-                    } else {
-                        "Tidak terdapat perbedaan signifikan antara varian kedua kelompok"
-                    }
-
-        if (textViewValue.parent == null) {
-            binding.layoutResult.addView(textViewName)
-            binding.layoutResult.addView(textViewValue)
+        if (alpha == null) {
+            runCount
+            Toast.makeText(requireActivity(), "Masukkan nilai alpha", Toast.LENGTH_SHORT).show()
+            return
         }
-    }
 
-    fun fDist(fValue: Double, df1: Int, df2: Int): Double {
-        val numerator = ((df1 * fValue).pow(df1.toDouble())) * ((df2.toDouble()).pow(df2.toDouble()))
-        val denominator = ((df1 * fValue) + df2).pow((df1 + df2).toDouble())
-        val beta = betaInc(df1 / 2.0, df2 / 2.0, df1 / (df1 + df2 * fValue))
-        return (numerator / denominator) * beta
-    }
+        // Combine two input data arrays into a list of lists
+        val groupList = listOf(dataValue1.toList(), dataValue2.toList())
 
-    fun betaInc(a: Double, b: Double, x: Double): Double {
-        val epsilon = 1e-15 // konstanta kecil untuk toleransi kesalahan
-        var h = 1.0
-        var d = 1.0
-        var aa = a
-        var bb = b
-        var i = 1
+        // Calculate the number of values in each group and the overall number of values
+        val m = dataValue1.size
+        val f = dataValue2.size
+        val n = m + f
 
-        while (true) {
-            val a1 = aa + i.toDouble()
-            val b1 = bb + i.toDouble()
-            val c1 = i.toDouble()
-            val d1 = x * (aa + bb + c1 - 1.0)
+        // Calculate overall mean
+        val overallMean = (dataValue1 + dataValue2).average()
 
-            val del = d1 / (a1 * b1 * c1)
+        // Calculate numerator and denominator for test statistic
+        var numerator = 0.0
+        var denominator = 0.0
 
-            h *= 1.0 + del
-            d = if (del.absoluteValue < epsilon) {
-                1.0 / (1.0 + del) * h
+        for (i in 0 until 2) {
+            val groupMean = groupList[i].average()
+            val diff = groupList[i].map { it - groupMean }
+            val groupN = groupList[i].size
+            numerator += groupN * ((groupMean - overallMean).pow(2))
+            val groupDenominator = (diff.map { it.pow(2) }.sum()) / (groupN - 1)
+            denominator += if (groupDenominator == 0.0) 0.0 else groupDenominator
+        }
+
+        val w = ((n - 2) / 1.0) * (numerator / denominator)
+
+        // Calculate p-value using F-distribution
+        val pValue = if (denominator == 0.0) 1.0 else 1.0 - FDistribution(1.0, ((n - 2).toDouble())).cumulativeProbability(w)
+
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName1, $edtDataName2",
+            descriptiveTitle = "$edtDataName1 descriptive:",
+            descriptiveContent = "n: $n",
+            testValuesContent = "p-Value: $pValue",
+            resultConclusion = if (pValue <= alpha) {
+                "Terdapat perbedaan variansi antar sampel data (α = $alpha)."
             } else {
-                d / (1.0 + del)
+                "Tidak terdapat perbedaan variansi antar sampel data (α = $alpha)."
             }
+        )
 
-            aa += 1.0
-            bb += 1.0
-
-            val delta = aa * bb
-            val frac = d * delta
-            val g = frac / h
-
-            if ((g - 1.0).absoluteValue < epsilon) {
-                return h * x.pow(a) * (1.0 - x).pow(b) / (a * delta)
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(false)
+                    adapter.setItems(results)
+                }
             }
-
-            i += 1
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun calculateGlesjerTest(edtDataAlpha: String, edtDataName: String, edtDataValue: String, textViewName: TextView, textViewValue: TextView) {
+    private fun calculateGlesjerTest(edtDataAlpha: String, edtDataName: String, edtDataValue: String) {
+        runCount++
         val dataValue = edtDataValue.split(" ").map { it.toDouble() }.toDoubleArray()
         val alpha = edtDataAlpha.toDoubleOrNull()
+
+        // Menghitung jumlah data dan nilai rata-rata
+        val n = dataValue.size
+        val mean = dataValue.average()
+
+        // Menghitung standard deviation dari data
+        val deviation = sqrt(dataValue.sumOf { (it - dataValue.average()).pow(2.0) } / (dataValue.size))
 
         val xBar = dataValue.average()
         val sSquared = dataValue.sumOf { (it - xBar).pow(2) } / (dataValue.size - 1)
@@ -414,22 +511,34 @@ class DataAnalysisFragment : Fragment() {
             if (tValue.absoluteValue > 2) index else null
         }
 
-        textViewName.text = "Data : $edtDataName"
-        textViewValue.text = "Glesjer Test : $tValues\n " +
-            if (outlierIndexes.isNotEmpty()) {
-            "Terjadi heteroskedastisitas. Outliers pada indeks ${outlierIndexes.joinToString()}"
-        } else {
-            "Tidak terjadi heteroskedastisitas"
-        }
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName",
+            descriptiveTitle = "$edtDataName descriptive:",
+            descriptiveContent = "n: $n; Mean : $mean; SD: $deviation",
+            testValuesContent = "t-Value: $tValues",
+            resultConclusion = if (outlierIndexes.isNotEmpty()) {
+                "Terjadi heteroskedastisitas. Outliers pada indeks ${outlierIndexes.joinToString()}"
+            } else {
+                "Tidak terjadi heteroskedastisitas"
+            }
+        )
 
-        if (textViewValue.parent == null) {
-            binding.layoutResult.addView(textViewName)
-            binding.layoutResult.addView(textViewValue)
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(false)
+                    adapter.setItems(results)
+                }
+            }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun calculateGlesjerTes(edtDataAlpha: String, edtDataName1: String, edtDataName2: String, edtDataValue1: String, edtDataValue2: String, textViewName: TextView, textViewValue: TextView) {
+    private fun calculateGlesjerTes(edtDataAlpha: String, edtDataName1: String, edtDataName2: String, edtDataValue1: String, edtDataValue2: String, textDataName: TextView, textViewValue: TextView) {
         val dataValue1 = edtDataValue1.split(" ").map { it.toDouble() }.toDoubleArray()
         val dataValue2 = edtDataValue2.split(" ").map { it.toDouble() }.toDoubleArray()
         val alpha = edtDataAlpha.toDoubleOrNull()
@@ -461,7 +570,7 @@ class DataAnalysisFragment : Fragment() {
         ))
 
         // 6. Interpret the results
-        textViewName.text = "Data 1 : $edtDataName1\nData 2 : $edtDataName2"
+        textDataName.text = "Data 1 : $edtDataName1\nData 2 : $edtDataName2"
         textViewValue.text = "Glesjer Test : $pValue\n" +
                 if (pValue < alpha!!) {
                     "Data menunjukkan heteroskedastisitas, menunjukkan bahwa varian residual tidak konstan pada semua level variabel independen."
@@ -470,7 +579,7 @@ class DataAnalysisFragment : Fragment() {
                 }
 
         if (textViewValue.parent == null) {
-            binding.layoutResult.addView(textViewName)
+            binding.layoutResult.addView(textDataName)
             binding.layoutResult.addView(textViewValue)
         }
     }
@@ -488,15 +597,245 @@ class DataAnalysisFragment : Fragment() {
         return predictedYValues
     }
 
-    private fun isHomoscedastic(predictedVariance: DoubleArray, residuals: DoubleArray, alpha: Double = 0.01): Boolean {
-        val n = residuals.size
-        val threshold = org.apache.commons.math3.distribution.FDistribution(1.0, (n - 2).toDouble()).inverseCumulativeProbability(1 - alpha / 2)
-        for (i in 0 until n) {
-            if (residuals[i] * residuals[i] > predictedVariance[i] * threshold) {
-                return false
+    private fun calculateVIF(edtDataName: String, edtDataValue: String) {
+        runCount++
+        val dataValue = edtDataValue.split(" ").map { it.toDouble() }.toDoubleArray()
+
+        // Menghitung jumlah data dan nilai rata-rata
+        val n = dataValue.size
+        val mean = dataValue.average()
+
+        // Menghitung standard deviation dari data
+        val deviation = sqrt(dataValue.sumOf { (it - dataValue.average()).pow(2.0) } / (dataValue.size))
+
+        // Then, calculate the correlation matrix of the input data
+        val corMatrix = Array(dataValue.size) { DoubleArray(dataValue.size) }
+        for (i in dataValue.indices) {
+            for (j in dataValue.indices) {
+                val xi = dataValue[i]
+                val xj = dataValue[j]
+                val xiMean = dataValue.average()
+                val xjMean = dataValue.average()
+                val numerator = (xi - xiMean) * (xj - xjMean)
+                val denominator = (dataValue.size - 1) * dataValue.standardDeviation()
+                corMatrix[i][j] = numerator / denominator
             }
         }
-        return true
+
+        // Next, calculate the Variance Inflation Factor (VIF) for each variable
+        val vifArray = DoubleArray(dataValue.size)
+        for (i in dataValue.indices) {
+            val sum = (dataValue.indices).sumOf { j -> corMatrix[j][i] * corMatrix[j][i] }
+            vifArray[i] = 1 / (1 - sum)
+        }
+
+        // Finally, calculate the average VIF and check if any VIF is greater than 10
+        val avgVif = vifArray.average()
+        val isMulticollinear = vifArray.any { it > 10 }
+
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName",
+            descriptiveTitle = "$edtDataName descriptive:",
+            descriptiveContent = "n: $n; Mean : $mean; SD: $deviation",
+            testValuesContent = "VIF values:\n" + vifArray.indices.joinToString("\n") { index -> "Variable ${index+1}: ${vifArray[index]}" },
+            resultConclusion = if (isMulticollinear) {
+                "Data menunjukkan multikolinieritas dengan rata-rata VIF: $avgVif"
+            } else {
+                "Data tidak menunjukkan multikolinieritas dengan rata-rata VIF: $avgVif"
+            }
+        )
+
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(false)
+                    adapter.setItems(results)
+                }
+            }
+        }
+    }
+
+    fun calculateOneSampleTTest(edtDataAlpha: String, edtDataPopulationMean: String, edtDataName: String, edtDataValue: String) {
+        runCount++
+        val dataValue = edtDataValue.split(" ").map { it.toDouble() }.toDoubleArray()
+        val alpha = edtDataAlpha.toDoubleOrNull()
+        val populationMean = edtDataPopulationMean.toDoubleOrNull()
+
+        if (alpha == null) {
+            runCount
+            Toast.makeText(requireActivity(), "Masukkan nilai signifikansi", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (populationMean == null) {
+            runCount
+            Toast.makeText(requireActivity(), "Masukkan nilai rata-rata populasi", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Menghitung jumlah data dan nilai rata-rata
+        val n = dataValue.size
+        val mean = dataValue.average()
+
+        // Menghitung standard deviation dari data
+        val variance = dataValue.sumOf { (it - dataValue.average()).pow(2.0) } / (dataValue.size - 1)
+        val standardDeviation = sqrt(variance)
+
+        val xBar = dataValue.sum() / n
+        val s = sqrt(dataValue.sumOf { (it - xBar).pow(2) } / (n - 1))
+        val t = (xBar - populationMean) / (s / sqrt(n.toDouble()))
+        val df = n - 1
+        val tCritical = abs(TDistribution(df.toDouble()).inverseCumulativeProbability((alpha.div(2))))
+
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName",
+            descriptiveTitle = "$edtDataName descriptive:",
+            descriptiveContent = "n: $n; Mean : $mean; SD: $standardDeviation",
+            testValuesContent = "t-Value: $t; t-Critical: $tCritical",
+            resultConclusion = if (abs(t) > tCritical) "H0 ditolak" else "H0 gagal ditolak"
+        )
+
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(false)
+                    adapter.setItems(results)
+                }
+            }
+        }
+    }
+
+    private fun calculatePairedTTest(edtDataAlpha: String, edtDataName1: String, edtDataValue1: String, edtDataName2: String, edtDataValue2: String) {
+        val dataValue1 = edtDataValue1.split(" ").map { it.toDouble() }.toDoubleArray()
+        val dataValue2 = edtDataValue2.split(" ").map { it.toDouble() }.toDoubleArray()
+        val alpha = edtDataAlpha.toDoubleOrNull()
+
+        if (alpha == null) {
+            runCount
+            Toast.makeText(requireActivity(), "Masukkan nilai signifikansi", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val n = dataValue1.size
+        var diffSum = 0.0
+        for (i in 0 until n) {
+            diffSum += dataValue2[i] - dataValue1[i]
+        }
+        val meanDiff = diffSum / n
+
+        var sqDiffSum = 0.0
+        for (i in 0 until n) {
+            sqDiffSum += (dataValue2[i] - dataValue1[i] - meanDiff).pow(2)
+        }
+        val stdDevDiff = sqrt(sqDiffSum / (n - 1))
+
+        val tScore = meanDiff / (stdDevDiff / sqrt(n.toDouble()))
+        val df = n - 1
+        val tDist = TDistribution(df.toDouble())
+        val tCritical = abs(tDist.inverseCumulativeProbability(alpha / 2))
+
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName1, $edtDataName2",
+            descriptiveTitle = "$edtDataName1 descriptive:",
+            descriptiveContent = "n: $n; Mean : $meanDiff; SD: $stdDevDiff",
+            testValuesContent = "t-Value: $tScore; t-Critical: $tCritical",
+            resultConclusion = if (abs(tScore) > tCritical) {
+                "H0 ditolak pada tingkat signifikansi $alpha. Terdapat perbedaan yang signifikan antara data1 dan data2."
+            } else {
+                "H0 gagal ditolak pada tingkat signifikansi $alpha. Tidak terdapat perbedaan yang signifikan antara data1 dan data2."
+            }
+        )
+
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(false)
+                    adapter.setItems(results)
+                }
+            }
+        }
+    }
+
+    private fun calculateIndependentSampleTTest(edtDataAlpha: String, edtDataName1: String, edtDataValue1: String, edtDataName2: String, edtDataValue2: String) {
+        val dataValue1 = edtDataValue1.split(" ").map { it.toDouble() }.toDoubleArray()
+        val dataValue2 = edtDataValue2.split(" ").map { it.toDouble() }.toDoubleArray()
+        val alpha = edtDataAlpha.toDoubleOrNull()
+
+        if (alpha == null) {
+            runCount
+            Toast.makeText(requireActivity(), "Masukkan nilai signifikansi", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Menghitung mean, std deviasi, dan jumlah sampel
+        val meanA = dataValue1.average()
+        val meanB = dataValue2.average()
+        val sdA = sqrt(dataValue1.map { (it - meanA).pow(2.0) }.sum() / (dataValue1.size - 1))
+        val sdB = sqrt(dataValue2.map { (it - meanB).pow(2.0) }.sum() / (dataValue2.size - 1))
+        val nA = dataValue1.size
+        val nB = dataValue2.size
+
+        val s = sqrt(((nA - 1) * sdA.pow(2.0) + (nB - 1) * sdB.pow(2.0)) / (nA + nB - 2))
+        val t = (meanA - meanB) / (s * sqrt(1.0/nA + 1.0/nB))
+
+        val df = nA + nB - 2
+        val tDist = TDistribution(df.toDouble())
+//        val pValue = 2.0 * (1.0 - tDist.cumulativeProbability(abs(t)))
+
+        // Melakukan uji Independent Sample T-Test
+        val tTest = TTest()
+        val pValue = tTest.tTest(dataValue1, dataValue2)
+
+        val result = DataAnalysisResult(
+            resultTitle = "Run #$runCount - ${binding.tvSelectData.text}",
+            resultData = "Data yang digunakan: $edtDataName1, $edtDataName2",
+            descriptiveTitle = "$edtDataName1 descriptive:",
+            descriptiveContent = "n: $nA; Mean : $meanA; SD: $sdA",
+            testValuesContent = "t-Value: $t; p-Value: $pValue",
+            resultConclusion = if (pValue < alpha) {
+                if (meanA > meanB) {
+                    "Terdapat perbedaan signifikan antara data A dan data B. Rata-rata data A lebih tinggi dari rata-rata data B."
+                } else {
+                    "Terdapat perbedaan signifikan antara data A dan data B. Rata-rata data B lebih tinggi dari rata-rata data A."
+                }
+            } else {
+                "Tidak terdapat perbedaan signifikan antara data A dan data B."
+            }
+        )
+
+        val repository = ModuleRepositoryImpl(requireContext())
+        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ResultViewModel::class.java]
+        viewModel.addResult(result)
+        viewModel.getResultList().observe(viewLifecycleOwner) { results ->
+            binding.rvResult.adapter?.let { adapter ->
+                if (adapter is ResultAdapter) {
+                    adapter.updateHideTestValues(false)
+                    adapter.setItems(results)
+                }
+            }
+        }
+    }
+
+    // Extension function to calculate the standard deviation of an array of doubles
+    fun DoubleArray.standardDeviation(): Double {
+        val mean = average()
+        var sum = 0.0
+        for (value in this) {
+            sum += (value - mean).pow(2.0)
+        }
+        return sqrt(sum / (size - 1))
     }
 
     private fun addData(context: Context, id: Int): TableRow {
@@ -555,18 +894,9 @@ class DataAnalysisFragment : Fragment() {
         valueEditText.setBackgroundResource(R.drawable.custom_round_background)
         valueEditText.hint = "Data"
         valueEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.toFloat())
-        valueEditText.inputType = InputType.TYPE_CLASS_NUMBER
         valueEditText.typeface = ResourcesCompat.getFont(context, R.font.inter)
         tableRow.addView(valueEditText)
 
         return tableRow
-    }
-
-    private val Int.dp: Int
-        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-
-    fun dpToPx(dp: Int): Int {
-        val density = resources.displayMetrics.density
-        return (dp.toFloat() * density).roundToInt()
     }
 }

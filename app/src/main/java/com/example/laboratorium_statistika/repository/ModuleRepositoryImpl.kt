@@ -5,15 +5,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.laboratorium_statistika.model.AnalysisTab
+import com.example.laboratorium_statistika.model.DataAnalysisResult
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import org.json.JSONObject
 
 class ModuleRepositoryImpl(private val context: Context) : ModuleRepository {
     private val jsonString = context.assets.open("modules.json").bufferedReader().use { it.readText() }
+    private val resultList = MutableLiveData<List<DataAnalysisResult>>(emptyList())
 
     override fun getModules(): LiveData<List<Module>> {
         val modulesLiveData = MutableLiveData<List<Module>>()
@@ -108,5 +107,14 @@ class ModuleRepositoryImpl(private val context: Context) : ModuleRepository {
 
         analysisTabLiveData.value = analysisTabList
         return analysisTabLiveData
+    }
+
+    override fun addResult(result: DataAnalysisResult) {
+        val currentList = resultList.value ?: emptyList()
+        resultList.value = currentList + result
+    }
+
+    override fun getResultList(): LiveData<List<DataAnalysisResult>> {
+        return resultList
     }
 }
