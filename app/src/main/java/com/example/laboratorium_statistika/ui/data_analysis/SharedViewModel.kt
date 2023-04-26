@@ -5,4 +5,6 @@ import androidx.lifecycle.ViewModel
 
 class SharedViewModel : ViewModel() {
     val analysisText = MutableLiveData<String>()
+    val selectedModuleId = MutableLiveData<Int>()
+    val selectedTabId = MutableLiveData<Int>()
 }
