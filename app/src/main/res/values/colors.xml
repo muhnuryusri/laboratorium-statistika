@@ -15,6 +15,7 @@
     <color name="gray_90">#666666</color>
     <color name="blue">#3347B0</color>
     <color name="blue_surface">#F7F8FC</color>
+    <color name="blue_border">#BBC2E5</color>
     <color name="yellow">#CD7B2E</color>
     <color name="red_main">#CB3A31</color>
     <color name="red_surface">#FDF7F7</color>
