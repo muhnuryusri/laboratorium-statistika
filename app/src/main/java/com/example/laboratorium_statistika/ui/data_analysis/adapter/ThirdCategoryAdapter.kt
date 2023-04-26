@@ -29,7 +29,7 @@ class ThirdCategoryAdapter(
     }
 
     interface OnAnalysisTabClickListener {
-        fun onAnalysisTabClicked(text: String)
+        fun onAnalysisTabClicked(text: String, tabId: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -53,21 +53,21 @@ class ThirdCategoryAdapter(
 
                 if (sharedViewModel.analysisText.value == item.title) {
                     tvCategory.setTextColor(ContextCompat.getColor(itemView.context, R.color.blue))
-                    root.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.blue_surface))
+                    tvCategory.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.blue_surface))
                     val drawable = ContextCompat.getDrawable(itemView.context, R.drawable.round_check_24)
                     drawable?.let {
                         val tint = ContextCompat.getColor(itemView.context, R.color.blue)
                         it.setColorFilter(tint, PorterDuff.Mode.SRC_IN)
                         tvCategory.setCompoundDrawablesWithIntrinsicBounds(null, null, it, null)
                     }
-                } else {
-                    tvCategory.setTextColor(ContextCompat.getColor(itemView.context, R.color.neutral_black))
-                    root.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
-                    tvCategory.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                 }
 
                 tvCategory.setOnClickListener {
-                    item.title?.let { it1 -> listener.onAnalysisTabClicked(it1) }
+                    item.title?.let { it1 -> item.id?.let { it2 ->
+                        listener.onAnalysisTabClicked(it1,
+                            it2
+                        )
+                    } }
                 }
             }
         }
