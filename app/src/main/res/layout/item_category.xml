@@ -9,17 +9,17 @@
     <TextView
         android:id="@+id/tv_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:text="@string/test"
         android:padding="14dp"
-        android:textColor="@color/gray_90"
+        android:textColor="@drawable/item_state_dialog_text_color"
         android:textSize="14sp"
         android:fontFamily="@font/inter"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        app:drawableTint="@color/gray_90"
+        android:background="@drawable/item_state_dialog_background_color"
+        app:drawableTint="@drawable/item_state_dialog_text_color"
         android:drawablePadding="50dp"
-        app:drawableEndCompat="@drawable/ic_round_keyboard_arrow_right_24" />
+        app:drawableEndCompat="@drawable/round_keyboard_arrow_right_24" />
 </LinearLayout>
