@@ -17,6 +17,15 @@
         <action
             android:id="@+id/action_dashboardFragment_to_dataAnalysisFragment"
             app:destination="@id/dataAnalysisFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_tableFragment"
+            app:destination="@id/tableFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_exercisesFragment"
+            app:destination="@id/exercisesFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_guideFragment"
+            app:destination="@id/guideFragment" />
     </fragment>
 
     <fragment
@@ -97,6 +106,28 @@
         android:label="fragment_table"
         tools:layout="@layout/fragment_table">
 
+        <action
+            android:id="@+id/action_tableFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_tableFragment_to_detailTableFragment"
+            app:destination="@id/detailTableFragment">
+
+            <argument
+                android:name="pdf_file_name"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailTableFragment"
+        android:name="com.example.laboratorium_statistika.ui.table.DetailTableFragment"
+        android:label="fragment_detail_table"
+        tools:layout="@layout/fragment_detail_table">
+
+        <action
+            android:id="@+id/action_detailTableFragment_to_tableFragment"
+            app:destination="@id/tableFragment" />
     </fragment>
 
     <fragment
