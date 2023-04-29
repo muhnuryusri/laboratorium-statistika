@@ -8,14 +8,14 @@ data class Module(
     var id: Int? = 0,
     var title: String? = null,
     var tab: List<ModuleTab>? = null,
-    var description: String? = null,
+    var module: String? = null,
 ) : Parcelable
 
 @Parcelize
 data class ModuleTab(
     var id: Int? = 0,
     var title: String? = null,
-    var description: String? = null,
+    var module: String? = null,
     var analysis: List<AnalysisTab>? = null
 ) : Parcelable
 
@@ -32,6 +32,12 @@ data class DataAnalysisResult(
     var resultData: String? = null,
     var descriptiveTitle: String? = null,
     var descriptiveContent: String? = null,
+    var secondDescriptiveTitle: String? = null,
+    var secondDescriptiveContent: String? = null,
+    var thirdDescriptiveTitle: String? = null,
+    var thirdDescriptiveContent: String? = null,
     var testValuesContent: String? = null,
-    var resultConclusion: String? = null
+    var resultConclusion: String? = null,
+    var amountOfData: Int? = 0,
+    var hideTestValues: Boolean? = false
 ) : Parcelable
