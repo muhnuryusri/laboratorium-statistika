@@ -40,6 +40,9 @@
             <argument
                 android:name="modules"
                 app:argType="integer" />
+            <argument
+                android:name="module"
+                app:argType="com.example.laboratorium_statistika.model.Module" />
         </action>
         <action
             android:id="@+id/action_moduleFragment_to_moduleDetailFragment"
