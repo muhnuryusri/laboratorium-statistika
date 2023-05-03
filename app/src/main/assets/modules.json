@@ -8,7 +8,7 @@
             {
               "tab_id": 1,
               "tab_title": "Ukuran Pemusatan Data",
-              "tab_description": "",
+              "tab_module": "",
               "analysis_tab": [
                 {
                   "id": 1,
@@ -27,7 +27,7 @@
             {
               "tab_id": 2,
               "tab_title": "Ukuran Penyebaran Data",
-              "tab_description": "",
+              "tab_module": "",
               "analysis_tab": [
                 {
                   "id": 1,
@@ -57,30 +57,30 @@
             {
               "tab_id": 1,
               "tab_title": "Uji Normalitas",
-              "tab_module": ""
+              "tab_module": "web_view/uji_asumsi/uji_normalitas.html"
             },
             {
               "tab_id": 2,
               "tab_title": "Uji Homogenitas",
-              "tab_module": ""
+              "tab_module": "web_view/uji_asumsi/uji_homogenitas.html"
             },
             {
               "tab_id": 3,
               "tab_title": "Uji Heteroskedastisitas",
-              "tab_module": ""
+              "tab_module": "web_view/uji_asumsi/uji_heteroskedastisitas.html"
             },
             {
               "tab_id": 4,
               "tab_title": "Uji Autokorelasi",
-              "tab_module": ""
+              "tab_module": "web_view/uji_asumsi/uji_autokorelasi.html"
             },
             {
               "tab_id": 5,
               "tab_title": "Uji Multikolinieritas",
-              "tab_module": ""
+              "tab_module": "web_view/uji_asumsi/uji_multikolinearitas.html"
             }
           ],
-          "module": ""
+          "module": "web_view/uji_asumsi/uji_asumsi.html"
         },
         {
           "id": 3,
@@ -89,7 +89,7 @@
             {
               "tab_id": 1,
               "tab_title": "Uji T",
-              "tab_module": "",
+              "tab_module": "web_view/uji_parametrik/uji_t.html",
               "analysis_tab": [
                 {
                   "id": 1,
@@ -136,7 +136,7 @@
               ]
             }
           ],
-          "module": ""
+          "module": "web_view/uji_parametrik/uji_parametrik.html"
         },
         {
           "id": 4,
@@ -154,7 +154,7 @@
             },
             {
               "tab_id": 3,
-              "tab_title": "Kruskal Walls",
+              "tab_title": "Kruskal Wallis",
               "tab_module": ""
             }
           ],
@@ -171,7 +171,7 @@
             },
             {
               "tab_id": 2,
-              "tab_title": "Uji Realibitas",
+              "tab_title": "Uji Reliabilitas",
               "tab_module": ""
             }
           ],
