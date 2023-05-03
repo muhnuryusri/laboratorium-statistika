@@ -12,17 +12,12 @@ import com.example.laboratorium_statistika.model.DataAnalysisResult
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
 
-class ResultAdapter(private var hideTestValues: Boolean) : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
+class ResultAdapter() : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
     private val items = mutableListOf<DataAnalysisResult>()
 
     fun setItems(newItems: List<DataAnalysisResult>) {
         items.clear()
         items.addAll(newItems.reversed())
-        notifyDataSetChanged()
-    }
-
-    fun updateHideTestValues(hideTestValues: Boolean) {
-        this.hideTestValues = hideTestValues
         notifyDataSetChanged()
     }
 
@@ -47,13 +42,39 @@ class ResultAdapter(private var hideTestValues: Boolean) : RecyclerView.Adapter<
                 tvDescriptiveTitle.text = item.descriptiveTitle
                 tvDescriptiveContent.text = item.descriptiveContent
 
-                if (hideTestValues) {
-                    tvTestValuesTitle.visibility = View.GONE
-                    tvTestValuesContent.visibility = View.GONE
-                    tvResultConclusion.visibility = View.GONE
+
+                if (item.hideTestValues == true) {
+                    layoutTestValuesContainer.visibility = View.GONE
                 } else {
+                    layoutTestValuesContainer.visibility = View.VISIBLE
                     tvTestValuesContent.text = item.testValuesContent
                     tvResultConclusion.text = item.resultConclusion
+                }
+
+                when (item.amountOfData) {
+                    1 -> {
+                        layoutSecondDescriptiveContainer.visibility = View.GONE
+                        layoutThirdDescriptiveContainer.visibility = View.GONE
+                    }
+                    2 -> {
+                        layoutSecondDescriptiveContainer.visibility = View.VISIBLE // Explicitly set to visible
+                        tvSecondDescriptiveTitle.text = item.secondDescriptiveTitle
+                        tvSecondDescriptiveContent.text = item.secondDescriptiveContent
+                        layoutThirdDescriptiveContainer.visibility = View.GONE
+                    }
+                    3 -> {
+                        layoutSecondDescriptiveContainer.visibility = View.VISIBLE // Explicitly set to visible
+                        tvSecondDescriptiveTitle.text = item.secondDescriptiveTitle
+                        tvSecondDescriptiveContent.text = item.secondDescriptiveContent
+                        layoutThirdDescriptiveContainer.visibility = View.VISIBLE // Explicitly set to visible
+                        tvThirdDescriptiveTitle.text = item.thirdDescriptiveTitle
+                        tvThirdDescriptiveContent.text = item.thirdDescriptiveContent
+                    }
+                    else -> { // Add an else condition to set the views to the default state
+                        layoutSecondDescriptiveContainer.visibility = View.GONE
+                        layoutThirdDescriptiveContainer.visibility = View.GONE
+                        layoutTestValuesContainer.visibility = View.GONE
+                    }
                 }
             }
         }
