@@ -29,5 +29,17 @@ class DashboardFragment : Fragment() {
         binding.btnDataAnalysis.setOnClickListener {
             findNavController().navigate(R.id.action_dashboardFragment_to_dataAnalysisFragment)
         }
+
+        binding.btnTable.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboardFragment_to_tableFragment)
+        }
+
+        binding.btnExercises.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboardFragment_to_exercisesFragment)
+        }
+
+        binding.btnGuide.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboardFragment_to_guideFragment)
+        }
     }
 }
