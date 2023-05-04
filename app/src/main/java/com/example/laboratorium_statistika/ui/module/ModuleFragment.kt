@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.laboratorium_statistika.databinding.FragmentModuleBinding
 import com.example.laboratorium_statistika.repository.ModuleRepositoryImpl
@@ -28,17 +29,21 @@ class ModuleFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.backButtonText.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         adapter = ModuleAdapter(this)
         binding.rvModule.adapter = adapter
         binding.rvModule.layoutManager = LinearLayoutManager(activity)
 
         val repository = ModuleRepositoryImpl(requireContext())
         viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[ModuleViewModel::class.java]
-        viewModel.getModules().observe(viewLifecycleOwner) { modules ->
-            binding.rvModule.adapter?.let { adapter ->
-                if (adapter is ModuleAdapter) {
-                    adapter.setItems(modules)
-                }
+
+        val modules = viewModel.getModules()
+        binding.rvModule.adapter?.let { adapter ->
+            if (adapter is ModuleAdapter) {
+                adapter.setItems(modules)
             }
         }
     }

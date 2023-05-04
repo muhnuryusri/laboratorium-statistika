@@ -7,9 +7,7 @@ import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
 
 interface ModuleRepository {
-    fun getModules(): LiveData<List<Module>>
-    fun getModuleTab(moduleId: Int): LiveData<List<ModuleTab>>
-    fun getAnalysisTab(moduleId: Int, tabId: Int): LiveData<List<AnalysisTab>>
-    fun addResult(result: DataAnalysisResult)
-    fun getResultList(): LiveData<List<DataAnalysisResult>>
+    fun getModules(): List<Module>
+    fun getModuleTab(moduleId: Int): List<ModuleTab>
+    fun getAnalysisTab(moduleId: Int, tabId: Int): List<AnalysisTab>
 }

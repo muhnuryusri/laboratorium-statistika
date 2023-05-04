@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('file:///android_res/font/inter.ttf');
+}
+
+@font-face {
+    font-family: 'Inter-Semibold';
+    src: url('file:///android_res/font/inter_semibold.ttf');
+}
+
+@font-face {
+    font-family: 'Inter-Medium';
+    src: url('file:///android_res/font/inter_medium.ttf');
+}
+
+@font-face {
+    font-family: 'Inter-Bold';
+    src: url('file:///android_res/font/inter_bold.ttf');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    color: #333333;
+}
+
+body {
+    padding: 0 20 20 20;
+}
+
+div {
+    margin-bottom: 20;
+}
+
+.main-header {
+    font-family: 'Inter-Semibold';
+    color: #333333;
+}
+
+h1, h2 {
+    font-family: 'Inter-Bold';
+}
+
+h3, h4 {
+    font-family: 'Inter-Semibold';
+}
+
+h1, h2, h3, h4 {
+    margin-bottom: 6;
+    color: #3347B0;
+}
+
+.definition {
+    margin-bottom: 20;
+}
+
+p {
+    text-align: justify;
+    margin-bottom: 12;
+    font-family: 'Inter';
+}
+
+.main-image {
+    margin: 10 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.equation {
+    margin: 0;
+}
+
+.figure {
+    margin: 0;
+    margin-bottom: 12;
+}
+
+ul, ol {
+    padding: 0 20;
+    font-family: 'Inter';
+}

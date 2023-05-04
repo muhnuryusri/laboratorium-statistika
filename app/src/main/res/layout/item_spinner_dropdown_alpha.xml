@@ -7,5 +7,5 @@
     android:gravity="center_vertical"
     android:fontFamily="@font/inter"
     android:textColor="@color/neutral_black"
-    android:textSize="12sp"
+    android:textSize="14sp"
     android:padding="12dp"/>

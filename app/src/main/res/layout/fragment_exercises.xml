@@ -1,17 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.exercises.ExercisesFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="On Progress..."
-        android:fontFamily="@font/inter_bold"
-        android:textSize="30sp"
-        android:textColor="@color/neutral_black"/>
+        android:orientation="vertical" >
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/back_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:drawablePadding="20dp"
+            android:fontFamily="@font/inter_semibold"
+            android:text="Kembali"
+            android:textColor="@color/blue"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/round_arrow_back_ios_new_24"
+            app:drawableTint="@color/blue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="Latihan Soal"
+            android:textAlignment="center"
+            android:textColor="@color/blue"
+            android:textSize="22sp"
+            app:layout_constraintTop_toBottomOf="@+id/back_button_text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_question"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_question" />
+    </LinearLayout>
+</RelativeLayout>

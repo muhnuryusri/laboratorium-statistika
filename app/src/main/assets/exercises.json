@@ -1,0 +1,86 @@
+{
+    "exercises": {
+      "question": [
+        {
+          "id": 1,
+          "question": "Ilmu yang mempelajari tentang statistik adalah",
+          "choices": [
+            { "choice": "A. Matematika" }, { "choice": "B. Data" }, { "choice": "C. Informasi" }, { "choice": "D. Statistik" }, { "choice": "E. Statistika" }
+          ],
+          "answer_index": 4
+        },
+        {
+          "id": 2,
+          "question": "Yang bukan merupakan jenis skala data adalah",
+          "choices": [
+            { "choice": "A. Nominal" }, { "choice": "B. Ordinal" }, { "choice": "C. Diskret" }, { "choice": "D. Interval" }, { "choice": "E. Rasio" }
+          ],
+          "answer_index": 2
+        },
+        {
+          "id": 3,
+          "question": "Variabel di bawah ini yang jenis skala datanya adalah ordinal adalah",
+          "choices": [
+            { "choice": "A. Agama" }, { "choice": "B. Umur mahasiswa" }, { "choice": "C. Tingkat pendidikan" }, { "choice": "D. Suhu tubuh" }, { "choice": "E. Panjang jalan" }
+          ],
+          "answer_index": 2
+        },
+        {
+          "id": 4,
+          "question": "Perbandingan dua populasi yang sifat samplenya independen, bisa menggunakan pengujian parametrik apa?",
+          "choices": [
+            { "choice": "A. Uji One Sample T-Test" }, { "choice": "B. Uji Paired Sample T-Test" }, { "choice": "C. Uji Independent Sample T-Test" }, { "choice": "D. Anova" }, { "choice": "E. Regresi" }
+          ],
+          "answer_index": 1
+        },
+        {
+          "id": 5,
+          "question": "Pengujian nonparametrik di bawah ini adalah",
+          "choices": [
+            { "choice": "A. Uji One Sample T-Test" }, { "choice": "B. Uji Paired Sample T-Test" }, { "choice": "C. Uji Independent Sample T-Test" }, { "choice": "D. Uji Anova" }, { "choice": "E. Uji Mann Whitney" }
+          ],
+          "answer_index": 4
+        },
+        {
+          "id": 6,
+          "question": "Tabel yang menunjukkan hubungan dua hal atau dua karakteristik disebut juga dengan",
+          "choices": [
+            { "choice": "A. Tabel Satu Arah" }, { "choice": "B. Tabel Dua Arah" }, { "choice": "C. Tabel Tiga Arah" }, { "choice": "D. Tabel Empat Arah" }, { "choice": "E. Tabel Lima Arah" }
+          ],
+          "answer_index": 1
+        },
+        {
+          "id": 7,
+          "question": "Untuk mengukur valid atau tidaknya instrumen penelitian menggunakan uji apa?",
+          "choices": [
+            { "choice": "A. Uji One Sample T-Test" }, { "choice": "B. Uji Validitas" }, { "choice": "C. Uji Reliabilitas" }, { "choice": "D. Uji Anova" }, { "choice": "E. Uji Mann Whitney" }
+          ],
+          "answer_index": 1
+        },
+        {
+          "id": 8,
+          "question": "Pengujian untuk melihat seberapa besar hubungan dua variabel adalah",
+          "choices": [
+            { "choice": "A. Uji One Sample T-Test" }, { "choice": "B. Uji Anova Two Way" }, { "choice": "C. Uji Satu Pihak" }, { "choice": "D. Uji Anova One Way" }, { "choice": "E. Uji Korelasi" }
+          ],
+          "answer_index": 4
+        },
+        {
+          "id": 9,
+          "question": "Pengujian untuk membandingan lebih dari dua sampel bisa menggunakan pengujian dengan",
+          "choices": [
+            { "choice": "A. Uji One Sample T-Test" }, { "choice": "B. Uji Paired Sample T-Test" }, { "choice": "C. Uji Independent Sample T-Test" }, { "choice": "D. Uji Anova" }, { "choice": "E. Uji Coefficient" }
+          ],
+          "answer_index": 3
+        },
+        {
+          "id": 10,
+          "question": "Pengujian Anova menggunakan table",
+          "choices": [
+            { "choice": "A. T-Table" }, { "choice": "B. F-Table" }, { "choice": "C. Z-Table" }, { "choice": "D. R-Table" }, { "choice": "E. Durbin Watson Table" }
+          ],
+          "answer_index": 2
+        }
+      ]
+    }
+  }

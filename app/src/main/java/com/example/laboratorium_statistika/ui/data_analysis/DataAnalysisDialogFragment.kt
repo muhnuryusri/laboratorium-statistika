@@ -43,15 +43,20 @@ class DataAnalysisDialogFragment : DialogFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = FirstCategoryAdapter(this)
-        binding.rvDataAnalysis.adapter = adapter
-        binding.rvDataAnalysis.layoutManager = LinearLayoutManager(activity)
-        currentAdapter = adapter
-
         val repository = ModuleRepositoryImpl(requireContext())
-
         viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[AnalysisTabViewModel::class.java]
-        viewModel.getModules().observe(viewLifecycleOwner) { modules ->
+
+        val text = sharedViewModel.analysisText.value
+        val moduleId = sharedViewModel.selectedModuleId.value
+        val tabId = sharedViewModel.selectedTabId.value
+        // observe the analysisText value in the sharedViewModel
+        sharedViewModel.analysisText.observe(this) { analysisText ->
+            adapter = FirstCategoryAdapter(this)
+            binding.rvDataAnalysis.adapter = adapter
+            binding.rvDataAnalysis.layoutManager = LinearLayoutManager(activity)
+            currentAdapter = adapter
+
+            val modules = viewModel.getModules()
             binding.rvDataAnalysis.adapter?.let { adapter ->
                 if (adapter is FirstCategoryAdapter) {
                     adapter.setItems(modules)
@@ -90,15 +95,12 @@ class DataAnalysisDialogFragment : DialogFragment(),
         binding.rvDataAnalysis.adapter = adapter
         currentAdapter = adapter
 
-        val repository = ModuleRepositoryImpl(requireContext())
-        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[AnalysisTabViewModel::class.java]
-        viewModel.getModuleTab(moduleId).observe(viewLifecycleOwner) { moduleTab ->
-            binding.rvDataAnalysis.adapter?.let { adapter ->
-                if (adapter is SecondCategoryAdapter) {
-                    adapter.setItems(moduleTab)
-                    adapter.setModuleId(moduleId)
-                    Log.d("onModuleClicked", "Data: $moduleTab")
-                }
+        val moduleTab = viewModel.getModuleTab(moduleId)
+        binding.rvDataAnalysis.adapter?.let { adapter ->
+            if (adapter is SecondCategoryAdapter) {
+                adapter.setItems(moduleTab)
+                adapter.setModuleId(moduleId)
+                Log.d("onModuleClicked", "Data: $moduleTab")
             }
         }
     }
@@ -112,25 +114,24 @@ class DataAnalysisDialogFragment : DialogFragment(),
         binding.rvDataAnalysis.adapter = adapter
         currentAdapter = adapter
 
-        val repository = ModuleRepositoryImpl(requireContext())
-        viewModel = ViewModelProvider(this, ModuleViewModelFactory(repository))[AnalysisTabViewModel::class.java]
-        viewModel.getAnalysisTab(moduleId, tabId).observe(viewLifecycleOwner) { analysisTab ->
-            if (analysisTab.isNullOrEmpty()) {
-                sharedViewModel.analysisText.value = text
-                dismiss()
-            } else {
-                binding.rvDataAnalysis.adapter?.let { adapter ->
-                    if (adapter is ThirdCategoryAdapter) {
-                        adapter.setItems(analysisTab)
-                    }
+        val analysisTab = viewModel.getAnalysisTab(moduleId, tabId)
+        if (analysisTab.isEmpty()) {
+            sharedViewModel.analysisText.value = text
+            sharedViewModel.selectedModuleId.value = moduleId
+            sharedViewModel.selectedTabId.value = tabId
+            dismiss()
+        } else {
+            binding.rvDataAnalysis.adapter?.let { adapter ->
+                if (adapter is ThirdCategoryAdapter) {
+                    adapter.setItems(analysisTab)
                 }
             }
         }
     }
 
-
-    override fun onAnalysisTabClicked(text: String) {
+    override fun onAnalysisTabClicked(text: String, tabId: Int) {
         sharedViewModel.analysisText.value = text
+        sharedViewModel.selectedTabId.value = tabId
         dismiss()
     }
 }

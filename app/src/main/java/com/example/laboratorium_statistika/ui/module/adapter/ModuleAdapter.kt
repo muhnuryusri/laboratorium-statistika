@@ -41,8 +41,8 @@ class ModuleAdapter(private val fragment: Fragment) : RecyclerView.Adapter<Modul
     inner class ViewHolder(private val binding: ItemModuleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Module) {
             binding.apply {
+                tvModuleItem.text = item.title
                 btnModul.apply {
-                    text = item.title
                     setOnClickListener {
                         val action = if (item.id == 1 || item.id == 5) {
                             item.let { it1 ->
@@ -53,8 +53,7 @@ class ModuleAdapter(private val fragment: Fragment) : RecyclerView.Adapter<Modul
                         } else {
                             item.id?.let { it1 ->
                                 ModuleFragmentDirections.actionModuleFragmentToModuleTabFragment(
-                                    it1
-                                )
+                                    it1, item)
                             }
                         }
                         if (action != null) {

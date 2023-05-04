@@ -20,9 +20,6 @@ class ModuleViewModelFactory(private val repository: ModuleRepository) : ViewMod
         } else if (modelClass.isAssignableFrom(AnalysisTabViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return AnalysisTabViewModel(repository) as T
-        } else if (modelClass.isAssignableFrom(ResultViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ResultViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
