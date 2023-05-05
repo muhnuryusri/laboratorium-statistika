@@ -43,59 +43,74 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="10dp"
-            android:background="@drawable/custom_round_background"
+            android:background="@drawable/item_state_question_choice_background"
             android:text="A. "
             android:fontFamily="@font/inter"
-            android:textColor="@color/neutral_black"
-            android:textSize="14sp"/>
+            android:textColor="@drawable/item_state_question_choice_text"
+            android:textSize="14sp"
+            android:textIsSelectable="true"/>
 
         <TextView
             android:id="@+id/tv_choice_b"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="10dp"
-            android:background="@drawable/custom_round_background"
+            android:background="@drawable/item_state_question_choice_background"
             android:text="B. "
             android:fontFamily="@font/inter"
-            android:textColor="@color/neutral_black"
-            android:textSize="14sp"/>
+            android:textColor="@drawable/item_state_question_choice_text"
+            android:textSize="14sp"
+            android:textIsSelectable="true"/>
 
         <TextView
             android:id="@+id/tv_choice_c"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="10dp"
-            android:background="@drawable/custom_round_background"
+            android:background="@drawable/item_state_question_choice_background"
             android:text="C. "
             android:fontFamily="@font/inter"
-            android:textColor="@color/neutral_black"
-            android:textSize="14sp"/>
+            android:textColor="@drawable/item_state_question_choice_text"
+            android:textSize="14sp"
+            android:textIsSelectable="true"/>
 
         <TextView
             android:id="@+id/tv_choice_d"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="10dp"
-            android:background="@drawable/custom_round_background"
+            android:background="@drawable/item_state_question_choice_background"
             android:text="D. "
             android:fontFamily="@font/inter"
-            android:textColor="@color/neutral_black"
-            android:textSize="14sp"/>
+            android:textColor="@drawable/item_state_question_choice_text"
+            android:textSize="14sp"
+            android:textIsSelectable="true"/>
 
         <TextView
             android:id="@+id/tv_choice_e"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="10dp"
-            android:background="@drawable/custom_round_background"
+            android:background="@drawable/item_state_question_choice_background"
             android:text="E. "
             android:fontFamily="@font/inter"
-            android:textColor="@color/neutral_black"
-            android:textSize="14sp"/>
+            android:textColor="@drawable/item_state_question_choice_text"
+            android:textSize="14sp"
+            android:textIsSelectable="true"/>
 
         <View
             android:layout_width="match_parent"
