@@ -5,9 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.laboratorium_statistika.databinding.ItemCategoryBinding
 import com.example.laboratorium_statistika.databinding.ItemResultBinding
-import com.example.laboratorium_statistika.model.AnalysisTab
 import com.example.laboratorium_statistika.model.DataAnalysisResult
 import com.example.laboratorium_statistika.model.Module
 import com.example.laboratorium_statistika.model.ModuleTab
@@ -57,24 +55,30 @@ class ResultAdapter() : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
                         layoutThirdDescriptiveContainer.visibility = View.GONE
                     }
                     2 -> {
-                        layoutSecondDescriptiveContainer.visibility = View.VISIBLE // Explicitly set to visible
+                        layoutSecondDescriptiveContainer.visibility = View.VISIBLE
                         tvSecondDescriptiveTitle.text = item.secondDescriptiveTitle
                         tvSecondDescriptiveContent.text = item.secondDescriptiveContent
                         layoutThirdDescriptiveContainer.visibility = View.GONE
                     }
                     3 -> {
-                        layoutSecondDescriptiveContainer.visibility = View.VISIBLE // Explicitly set to visible
+                        layoutSecondDescriptiveContainer.visibility = View.VISIBLE
                         tvSecondDescriptiveTitle.text = item.secondDescriptiveTitle
                         tvSecondDescriptiveContent.text = item.secondDescriptiveContent
-                        layoutThirdDescriptiveContainer.visibility = View.VISIBLE // Explicitly set to visible
+                        layoutThirdDescriptiveContainer.visibility = View.VISIBLE
                         tvThirdDescriptiveTitle.text = item.thirdDescriptiveTitle
                         tvThirdDescriptiveContent.text = item.thirdDescriptiveContent
                     }
-                    else -> { // Add an else condition to set the views to the default state
+                    else -> {
                         layoutSecondDescriptiveContainer.visibility = View.GONE
                         layoutThirdDescriptiveContainer.visibility = View.GONE
                         layoutTestValuesContainer.visibility = View.GONE
                     }
+                }
+
+                if (adapterPosition == itemCount - 1) {
+                    viewLine.visibility = View.GONE
+                } else {
+                    viewLine.visibility = View.VISIBLE
                 }
             }
         }
