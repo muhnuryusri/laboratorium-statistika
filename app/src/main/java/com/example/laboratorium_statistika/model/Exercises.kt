@@ -9,12 +9,9 @@ class Questions(
     val id: Int = 0,
     val question: String,
     val choices: List<Choices>,
-    var answerIndex: Int,
-    var isCorrect: Boolean = false
+    var answerIndex: Int
 )
 
 class Choices(
-    val choice: String,
-    var isCorrect: Boolean = false,
-    var selected: Boolean = false
+    val choice: String
 )

@@ -79,7 +79,7 @@
           "choices": [
             { "choice": "A. T-Table" }, { "choice": "B. F-Table" }, { "choice": "C. Z-Table" }, { "choice": "D. R-Table" }, { "choice": "E. Durbin Watson Table" }
           ],
-          "answer_index": 2
+          "answer_index": 1
         }
       ]
     }

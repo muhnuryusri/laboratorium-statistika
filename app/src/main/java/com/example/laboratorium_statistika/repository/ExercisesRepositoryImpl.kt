@@ -32,14 +32,9 @@ class ExercisesRepositoryImpl(private val context: Context): ExercisesRepository
             for (j in 0 until choiceArray.size()) {
                 val choiceObject = choiceArray.get(j).asJsonObject
                 val choiceText = choiceObject.get("choice").asString
-                val isCorrect = j == answerIndex // set isCorrect to true for the correct answer
 
-                val choiceModel = Choices(choiceText, isCorrect)
+                val choiceModel = Choices(choiceText)
                 choiceList.add(choiceModel)
-
-                if (isCorrect) {
-                    questionModel.answerIndex = j // set the index of the correct answer in the question object
-                }
             }
         }
 
