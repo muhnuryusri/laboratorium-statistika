@@ -20,6 +20,7 @@ interface DataAnalysisRepository {
     fun calculateUjiBinomial(dataAlpha: String, edtDataSuccessesName: String, edtDataSuccesses: String, edtDataTrialsName: String, edtDataTrials: String, edtDataExpectiationName: String, edtDataExpectation: String, runCount: Int, tvSelectData: String): DataAnalysisResult
     fun calculateMannWhitney(dataAlpha: String, edtDataName1: String, edtDataValue1: String, edtDataName2: String, edtDataValue2: String, runCount: Int, tvSelectData: String): DataAnalysisResult
     fun calculateKruskalWallis(dataAlpha: String, edtDataName1: String, edtDataValue1: String, edtDataName2: String, edtDataValue2: String, edtDataName3: String, edtDataValue3: String, runCount: Int, tvSelectData: String): DataAnalysisResult
+    fun calculateUjiValiditas(dataAlpha: String, edtDataName1: String, edtDataValue1: String, edtDataName2: String, edtDataValue2: String, runCount: Int, tvSelectData: String): DataAnalysisResult
 
     fun addResult(result: DataAnalysisResult)
     fun getResultList(): LiveData<List<DataAnalysisResult>>

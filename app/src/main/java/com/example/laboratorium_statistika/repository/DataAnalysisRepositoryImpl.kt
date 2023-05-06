@@ -1048,6 +1048,58 @@ class DataAnalysisRepositoryImpl(private val context: Context): DataAnalysisRepo
         )
     }
 
+    override fun calculateUjiValiditas(
+        dataAlpha: String,
+        edtDataName1: String,
+        edtDataValue1: String,
+        edtDataName2: String,
+        edtDataValue2: String,
+        runCount: Int,
+        tvSelectData: String
+    ): DataAnalysisResult {
+        val dataValue1 = edtDataValue1.split(" ").map { it.toDouble() }.toDoubleArray()
+        val dataValue2 = edtDataValue2.split(" ").map { it.toDouble() }.toDoubleArray()
+        val alpha = dataAlpha.toDouble()
+
+        val meanA = dataValue1.average()
+        val meanB = dataValue2.average()
+        val sdA = dataValue1.standardDeviation()
+        val sdB = dataValue2.standardDeviation()
+        val nA = dataValue1.size
+        val nB = dataValue2.size
+
+        val s = sqrt(((nA - 1) * sdA.pow(2.0) + (nB - 1) * sdB.pow(2.0)) / (nA + nB - 2))
+        val t = (meanA - meanB) / (s * sqrt(1.0/nA + 1.0/nB))
+
+        // Melakukan uji Independent Sample T-Test
+        val tTest = TTest()
+        val pValue = tTest.tTest(dataValue1, dataValue2)
+
+        val conclusion = if (pValue < alpha) {
+            if (meanA > meanB) {
+                "Terdapat perbedaan signifikan antara data A dan data B. Rata-rata data A lebih tinggi dari rata-rata data B."
+            } else {
+                "Terdapat perbedaan signifikan antara data A dan data B. Rata-rata data B lebih tinggi dari rata-rata data A."
+            }
+        } else {
+            "Tidak terdapat perbedaan signifikan antara data A dan data B."
+        }
+
+        return DataAnalysisResult(
+            id = runCount,
+            resultTitle = "Run #$runCount - $tvSelectData",
+            resultData = "Data yang digunakan: $edtDataName1, $edtDataName2",
+            descriptiveTitle = "$edtDataName1 descriptive:",
+            descriptiveContent = "n: $nA; Mean: $meanA; SD: $sdA",
+            secondDescriptiveTitle = "$edtDataName2 descriptive:",
+            secondDescriptiveContent = "n: $nB; Mean: $meanB; SD: $sdB",
+            testValuesContent = "t-Value: $t; p-Value: $pValue",
+            resultConclusion = conclusion,
+            amountOfData = 2,
+            hideTestValues = false
+        )
+    }
+
     // Function to calculate the rank sum of a given array
     private fun rankSum(data: DoubleArray): Double {
         val sortedData = data.sorted()

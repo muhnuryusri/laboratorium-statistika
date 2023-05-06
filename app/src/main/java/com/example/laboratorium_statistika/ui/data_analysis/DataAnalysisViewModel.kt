@@ -89,4 +89,9 @@ class DataAnalysisViewModel(private val repository: DataAnalysisRepository) : Vi
         val result = repository.calculateKruskalWallis(dataAlpha, edtDataName1, edtDataValue1, edtDataName2, edtDataValue2, edtDataName3, edtDataValue3, runCount, tvSelectData)
         repository.addResult(result)
     }
+
+    fun calculateUjiValiditas(dataAlpha: String, edtDataName1: String, edtDataValue1: String, edtDataName2: String, edtDataValue2: String, runCount: Int, tvSelectData: String) {
+        val result = repository.calculateUjiValiditas(dataAlpha, edtDataName1, edtDataValue1, edtDataName2, edtDataValue2, runCount, tvSelectData)
+        repository.addResult(result)
+    }
 }

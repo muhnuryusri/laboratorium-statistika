@@ -47,9 +47,9 @@ class DataAnalysisFragment : Fragment() {
     private lateinit var dataAnalysisViewModel: DataAnalysisViewModel
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var alpha: String? = null
-    private val alphaAnalysisList = listOf("Uji Normalitas", "Uji Homogenitas", "Uji Heteroskedastisitas", "Uji Autokorelasi", "One Sample T-Test", "Paired Sample T-Test", "Independent Sample T-Test", "One Way Anova", "Two Way Anova", "Regresi Linear Sederhana", "Regresi Linear Berganda", "Uji Binomial", "Mann Whitney", "Kruskal Wallis")
+    private val alphaAnalysisList = listOf("Uji Normalitas", "Uji Homogenitas", "Uji Heteroskedastisitas", "Uji Autokorelasi", "One Sample T-Test", "Paired Sample T-Test", "Independent Sample T-Test", "One Way Anova", "Two Way Anova", "Regresi Linear Sederhana", "Regresi Linear Berganda", "Uji Binomial", "Mann Whitney", "Kruskal Wallis", "Uji Validitas")
     private val oneDataUsedList = listOf("Rata-rata", "Median", "Modus", "Range", "Ragam", "Simpangan Baku", "Kuartil", "Uji Normalitas", "Uji Autokorelasi", "Uji Multikolinearitas", "One Sample T-Test")
-    private val twoDataUsedList = listOf("Uji Homogenitas", "Uji Heteroskedastisitas", "Paired Sample T-Test", "Independent Sample T-Test", "Regresi Linear Sederhana", "Mann Whitney")
+    private val twoDataUsedList = listOf("Uji Homogenitas", "Uji Heteroskedastisitas", "Paired Sample T-Test", "Independent Sample T-Test", "Regresi Linear Sederhana", "Mann Whitney", "Uji Validitas")
     private val threeDataUsedList = listOf("One Way Anova", "Regresi Linear Berganda", "Uji Binomial", "Kruskal Wallis")
     private val fourDataUsedList = listOf("Two Way Anova")
     private var runCount = 0
@@ -422,6 +422,10 @@ class DataAnalysisFragment : Fragment() {
                                 }
                                 "Mann Whitney" -> alpha?.let { it1 ->
                                     dataAnalysisViewModel.calculateMannWhitney(
+                                        it1, edtDataName1, edtDataValue1, edtDataName2, edtDataValue2, runCount, tvSelectData)
+                                }
+                                "Uji Validitas" -> alpha?.let { it1 ->
+                                    dataAnalysisViewModel.calculateUjiValiditas(
                                         it1, edtDataName1, edtDataValue1, edtDataName2, edtDataValue2, runCount, tvSelectData)
                                 }
                             }
