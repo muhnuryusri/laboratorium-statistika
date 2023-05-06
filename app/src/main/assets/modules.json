@@ -108,7 +108,7 @@
             {
               "tab_id": 2,
               "tab_title": "Uji Anova",
-              "tab_module": "",
+              "tab_module": "web_view/uji_parametrik/uji_anova.html",
               "analysis_tab": [
                 {
                   "id": 1,
@@ -123,7 +123,7 @@
             {
               "tab_id": 3,
               "tab_title": "Uji Regresi",
-              "tab_module": "",
+              "tab_module": "web_view/uji_parametrik/uji_regresi.html",
               "analysis_tab": [
                 {
                   "id": 1,
@@ -145,20 +145,20 @@
             {
               "tab_id": 1,
               "tab_title": "Uji Binomial",
-              "tab_module": ""
+              "tab_module": "web_view/uji_non_parametrik/uji_binomial.html"
             },
             {
               "tab_id": 2,
               "tab_title": "Mann Whitney",
-              "tab_module": ""
+              "tab_module": "web_view/uji_non_parametrik/uji_mann_whitney.html"
             },
             {
               "tab_id": 3,
               "tab_title": "Kruskal Wallis",
-              "tab_module": ""
+              "tab_module": "web_view/uji_non_parametrik/uji_kruskal_wallis.html"
             }
           ],
-          "module": ""
+          "module": "web_view/uji_non_parametrik/uji_non_parametrik.html"
         },
         {
           "id": 5,
@@ -167,15 +167,15 @@
             {
               "tab_id": 1,
               "tab_title": "Uji Validitas",
-              "tab_module": ""
+              "tab_module": "web_view/uji_instrumen/uji_validitas.html"
             },
             {
               "tab_id": 2,
               "tab_title": "Uji Reliabilitas",
-              "tab_module": ""
+              "tab_module": "web_view/uji_instrumen/uji_reliabilitas.html"
             }
           ],
-          "module": ""
+          "module": "web_view/uji_instrumen/uji_instrumen.html"
         }
       ]
     }
