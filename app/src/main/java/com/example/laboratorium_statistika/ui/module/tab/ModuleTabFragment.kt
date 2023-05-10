@@ -93,12 +93,13 @@ class ModuleTabFragment : Fragment() {
 
         binding.tvSubmodule.setOnClickListener {
             val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+            val desiredHeight = (screenHeight * 0.75).toInt()
             val layoutParams = binding.layoutSubmoduleContainer.layoutParams
             val measureSpec = View.MeasureSpec.makeMeasureSpec(screenHeight, View.MeasureSpec.AT_MOST)
             binding.layoutResult.measure(measureSpec, measureSpec)
 
             val animator = if (layoutParams.height == binding.tvSubmodule.height) {
-                ValueAnimator.ofInt(binding.tvSubmodule.height, binding.layoutResult.measuredHeight)
+                ValueAnimator.ofInt(binding.tvSubmodule.height, desiredHeight)
             } else {
                 ValueAnimator.ofInt(binding.layoutSubmoduleContainer.measuredHeight, binding.tvSubmodule.height)
             }
