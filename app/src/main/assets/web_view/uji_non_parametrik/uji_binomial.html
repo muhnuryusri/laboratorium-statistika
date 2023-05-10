@@ -1,0 +1,91 @@
+<html>
+    <body>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="file:///android_asset/web_view/style.css">
+        <div align="center">
+            <h3 class="main-header">Submodul 1</h3>
+            <h1>Uji Binomial</h1>
+        </div>
+
+        <div>
+            <div class="definition">
+                <p>
+                    Uji binomial biasa digunakan untuk jenis penelitian deskriptif dan tujuan uji statistik untuk menguji perbedaan proporsi pada populasi yang hanya memiliki dua buah kategori (skala nominal) berdasarkan proporsi yang berasal dari sampel tunggal. Uji binomial menguji hipotesis yang berhubungan ddengan proporsi suatu populasi tertentu. Jenis data pada uji ini adalah Nominal 2 kategori (variabel dikotomi).
+                </p>
+                <p>
+                    Hasil dari uji binomial ini bersifat mutually exclusive dan saling independent dimana hasil percobaan yang satu tidak mempengaruhi hasil lainnya
+                </p>
+                <p>
+                    Uji Binomial menguji hipotesis tentang suatu proporsi populasi yang berasal dari 1 sampel tunggal. Ciri binomial adalah data berupa dua (bi) macam unsur, yaitu “gagal‟ atau “sukses‟ yang diulang sebanyak n kali dan peneliti bebas untuk mendefinisikan apa yang dimaksud “sukses‟ dan apa yang dikategorikan “gagal‟.
+                </p>
+                <p>
+                    Ada beberapa asumsi yang digunakan di uji binomial ini, yaitu:
+                    <ul>
+                        <li>n percobaan saling independen.</li>
+                        <li>Masing-masing percobaan mempunyai probabilitas yang sama yaitu P (kelas pertama) dan 1-P atau Q (kelas kedua).</li>
+                    </ul>
+                </p>
+
+                </div>
+                    <h4>Rumus Perhitungan</h4>
+                    <img class="equation" src="file:///android_asset/web_view/web_view_image/uji_non_parametrik/uji_binomial_equation_1.svg">
+
+                    <p>
+                        Keterangan:
+                        <ul>
+                            <li>P = Proporsi kasus yang diharapkan dalam salah satu kategori/ proporsi “sukses” dalam populasi.</li>
+                            <li>q = Proporsi yang muncul dalam kategori lainnya/ proporsi “gagal” dalam populasi. (q= 1-p).</li>
+                            <li>N = Jumlah sampel. K = Jumlah pengamatan terbesar.</li>
+                        </ul>
+                    </p>
+
+                    <div>
+                        <h4>Langkah-Langkah Uji Binomial</h4>
+                        <p>
+                            Untuk pengujian sampel kecil:
+                            <ol>
+                                <li>Menentukan uji hipotesa dan signifikansinya.</li>
+                                <li>Menentukan pengamatan (x) dari jumlah N.</li>
+                                <li>Mencari harga p dengan cara mengkonversi nilai x berdasarkan N dengan menggunakan tabel binom.</li>
+                                <li>Menjumlah semua harga p.</li>
+                                <li>
+                                    Membandingkan harga p dengan derajat kesalahan yaitu:
+                                    <ul>
+                                        <li>
+                                            Jika derajat kesalahan yang digunakan 1% maka uji hipotesisnya adalah:
+                                            <ol type="a">
+                                                <li>Tolak H0 apabila harga p ≤ α 0,01.</li>
+                                                <li>Terima H0 apabila harga p > α 0,01.</li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            Jika derajat kesalahan yang digunakan 5%, maka uji hipotesisnya adalah:
+                                            <ol type="a">
+                                                <li>Tolak H0 apabila harga p ≤ α 0,05.</li>
+                                                <li>Terima H0 apabila harga p > α 0,05.</li>
+                                            </ol>
+                                        </li>
+                                        <li>Membuat kesimpulan dengan menerima atau menolak H0.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </p>
+                        <p>Untuk pengujian sampel besar:</p>
+                        <p>
+                            Melalui pendekatan kurva normal (Z-score). Untuk menguji hipotesis dengan menggunakan tes binomial, rumusnya adalah:
+                        </p>
+                        <img class="equation" src="file:///android_asset/web_view/web_view_image/uji_non_parametrik/uji_binomial_equation_2.svg">
+                    </div>
+                </div>
+            </div>
+
+            <div class="source">
+                <p>
+                    Sumber:
+                    <br>
+                    • Trimawartinah, MKM., Bahan Ajar Statistik Non Parametrik Edisi Pertama, hal. 7 - 8.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

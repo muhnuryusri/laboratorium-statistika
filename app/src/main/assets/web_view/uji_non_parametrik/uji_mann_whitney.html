@@ -1,0 +1,77 @@
+<html>
+    <body>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="file:///android_asset/web_view/style.css">
+        <div align="center">
+            <h3 class="main-header">Submodul 2</h3>
+            <h1>Uji Mann Whitney</h1>
+        </div>
+
+        <div>
+            <div class="definition">
+                <p>
+                    Uji ini diperkenalkan oleh Mann Whitney pada tahun 1947. Uji ini merupakan alternatif uji beda dua rata-rata parametrik dengan menggunakan referensi distribusi t (sampel-sampel berukuran kecil). Uji ini digunakan pada jenis penelitian komparatif untuk menguji hipotesis mengenai median dari dua populasi yang saling bebas (independent). Jenis data pada uji ini berskala ordinal.
+                </p>
+
+                </div>
+                    <h4>Asumsi</h4>
+                    <ol>
+                        <li>Data terdiri dari contoh acak X1, X2, …, Xn yang berasal dari populasi 1 dengan median Mx, dan contoh acak Y1, Y2, …, Yn dari populasi 2 dengan median My. Nilai Mx dan My tidak diketahui.</li>
+                        <li>Kedua contoh saling bebas.</li>
+                        <li>Peubah acak bersifat kontinu.</li>
+                        <li>Skala pengukuran minimal ordinal.</li>
+                        <li>Fungsi sebaran dari kedua populasi hanya dipisahkan oleh lokasi parameter.</li>
+                    </ol>
+                    <br>
+
+                    <h4>Hipotesis</h4>
+                    <ol>
+                        <li>(Dua arah) : H0 : Mx = My vs. H1 : Mx ≠ My</li>
+                        <li>(Satu arah) : H0 : Mx ≥ My vs. H1 : Mx < My</li>
+                        <li>(Satu arah) : H0 : Mx ≤ My vs. H1 : Mx > My</li>
+                    </ol>
+                    <br>
+
+                    <h4>Rumus Perhitungan</h4>
+                    <img class="equation" src="file:///android_asset/web_view/web_view_image/uji_non_parametrik/uji_mann_whitney_equation_1.svg">
+                    <p>
+                        Keterangan:
+                        <ul>
+                            <li>T = Jumlah peringkat nilai hasil perhitungan Man Whitney</li>
+                            <li>S =Jumlah rangking pada sampel</li>
+                            <li>n1 = Jumlah sampel 1</li>
+                        </ul>
+                    </p>
+
+                    <h4>Langkah-Langkah Pengujian</h4>
+                    <ol>
+                        <li>Pengurutan nilai mulai dari yang terkecil hingga terbesar.</li>
+                        <li>Pengurutan dilakukan tanpa pemisahan kedua sampel.</li>
+                        <li>Selanjutnya lakukan penetapan Rank (Peringkat) dengan aturan berikut: Peringkat ke -1 diberikan pada nilai terkecil di urutan pertama dan peringkat tertinggi diberikan pada nilai terbesar. Jika terdapat ties (nilai yang sama), beri peringkat tengah (mid-rank).</li>
+                        <li>Jumlahkan peringkat yang berasal dari populasi 1. Nyatakan hasilnya sebagai S.</li>
+                        <li>Hitung nilai statistik uji Mann Whitney.</li>
+                        <li>
+                            Kaidah keputusan:
+                            <ul>
+                                <li>(Hipotesis a): Tolak H0 jika T < wα/2 atau T > w1–α/2, dimana w1–α/2 = n1n2 – wα/2</li>
+                                <li>(Hipotesis b): Tolak H0 jika T < wα</li>
+                                <li>(Hipotesis c): Tolak H0 jika T > w1–α, di mana w1–α = n1n2 – wα. w adalah nilai kritis bagi T</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <br>
+
+                    <h4>Catatan</h4>
+                    <img class="equation" src="file:///android_asset/web_view/web_view_image/uji_non_parametrik/uji_mann_whitney_equation_2.svg">
+            </div>
+
+            <div class="source">
+                <p>
+                    Sumber:
+                    <br>
+                    • Trimawartinah, MKM., Bahan Ajar Statistik Non Parametrik Edisi Pertama, hal. 12 - 14.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,92 @@
+<html>
+    <body>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="file:///android_asset/web_view/style.css">
+        <div align="center">
+            <h3 class="main-header">Submodul 2</h3>
+            <h1>Uji Anova</h1>
+        </div>
+
+        <div>
+            <div class="definition">
+                <p>
+                    ANOVA (Analysis of Variance) merupakan uji komparasi multivariabel dengan menguji apakah terdapat perbedaan rata-rata tiga kelompok atau lebih dengan membandingkan variansinya. Anova dapat digunakan untuk menganalisa sejumlah sampel dengan jumlah data yang sama pada tiap-tiap kelompok sampel, atau dengan jumlah data yang berbeda. ANOVA mensyaratkan data-data penelitian untuk dikelompokkan berdasarkan kriteria tertentu. Sampel yang berbeda dilihat dari variabilitas-nya. Ukuran-ukuran pada variabilitas ditunjukkan dengan nilai variansi dan standard deviation (simpangan baku).
+                </p>
+                <p>
+                    Ada beberapa asumsi yang digunakan dalam pengujian Anova, yaitu:
+                    <ol>
+                        <li>Data dari populasi-populasi (sampel) berjenis interval atau rasio.</li>
+                        <li>Populasi atau sampel yang akan diuji lebih dari dua populasi.</li>
+                        <li>Populasi atau sampel yang akan diuji berdistribusi normal.</li>
+                        <li>Varian setiap populasi (sampel) harus sama (homogen).</li>
+                    </ol>
+                </p>
+
+                </div>
+                    <h4>Anova Satu Arah (One Way Anova)</h4>
+                    <p>
+                        Anova satu arah (One way Anova) biasanya digunakan untuk menguji nilai rata-rata perlakuan dari suatu percobaan yang menggunakan satu faktor, dimana satu faktor tersebut memiliki tiga atau lebih kelompok. Disebut satu arah karena peneliti dalam penelitiannya hanya berkepentingan dengan satu faktor saja atau mengelompokkan data berdasarkan satu kriteria saja.
+                    </p>
+                    <p>Uji ANOVA Satu Arah berdasarkan pada:</p>
+
+                    <div>
+                        <h4>1. Hipotesis</h4>
+                        <p>
+                            H<sub>0</sub> : <img class="equation" src="file:///android_asset/web_view/web_view_image/uji_parametrik/uji_anova_equation_1.svg"> (tak ada perbedaan mean di kelompok kategori)<br>
+                            H<sub>1</sub> : Sedikitnya ada satu mean yang berbeda pada kelompok kategori
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4>2. Statistik Uji</h4>
+                        <p>Tabel Anova</p>
+                        <img src="file:///android_asset/web_view/web_view_image/uji_parametrik/uji_anova_table_1.svg">
+                        <br><br>
+                        <p>Uraian rumus:</p>
+                        <img class="equation-center" src="file:///android_asset/web_view/web_view_image/uji_parametrik/uji_anova_equation_2.svg">
+                        <p>dimana k adalah jumlah kelompok kategori dan n jumlah data dalam kelompok kategori.</p>
+                    </div>
+
+                    <div>
+                        <h4>3. Kaidah Keputusan</h4>
+                        <p>
+                            Jika nilai F<sub>h</sub> < F<sub>tabel</sub> ,maka H<sub>0</sub> diterima.<br>
+                            Jika nilai F<sub>h</sub> ≥ F<sub>tabel</sub> ,maka H<sub>0</sub> ditolak.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4>4. Kesimpulan</h4>
+                        <p>
+                            Jika H<sub>0</sub> diterima, maka tidak ada perbedaan mean dalam kelompok kategori.<br>
+                            Jika H<sub>0</sub> ditolak, maka ada perbedaan mean dalam kelompok kategori.
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Anova Dua Arah (Two Way Anova)</h4>
+                    <p>
+                        ANOVA dua arah digunakan apabila sumber keragaman yang terjadi tidak hanya karena satu faktor atau satu perlakuan. Faktor lain yang mungkin menjadi sumber keragaman respon juga diperhatikan. Faktor lain ini bisa perlakuan lain atau faktor yang sudah terkondisi. Pertimbangan memasukkan faktor kedua sebagai sumber keragaman ini perlu bila faktor itu dikelompokkan (blok), sehingga keragaman antar kelompok sangat besar, tetapi kecil dalam kelompok sendiri. Tujuan dan pengujian ANOVA dua arah ini adalah untuk mengetahui apakah ada perbedaan dari berbagai faktor atau kriteria yang diuji terhadap hasil yang diinginkan.
+                    </p>
+                    <p>ANOVA dua arah terdiri dari 2 jenis, yaitu:</p>
+                    <p>
+                        ANOVA Dua Arah Data Tunggal (Two Way ANOVA Without Replication). Sejumlah pengamatan yang diklasifikasikan menurut dua faktor dengan data yang digunakan bersifat tunggal dimana tidak terdapat replikasi dalam pengamatan.
+                    </p>
+                    <p>
+                        ANOVA Dua Arah Data Banyak (Two Way ANOVA With Replication) Sejumlah pengamatan diklasifikasikan menurut dua faktor dengan data yang digunakan melibatkan replikasi dalam pengamatan.
+                    </p>
+                </div>
+            </div>
+
+            <div class="source">
+                <p>
+                    Sumber:
+                    <br>
+                    • MODUL II ANALYSIS OF VARIANCE (ANOVA), Universitas Islam Indonesia<br>
+                    • <a href="https://www.rumusstatistik.com/2020/10/anova-satu-arah.html">Rumus Statistika</a>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
